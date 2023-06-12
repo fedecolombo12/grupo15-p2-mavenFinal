@@ -8,9 +8,9 @@ import java.util.Objects;
 public class User implements Comparable<User> {
     private long idUser = 0;
     private String name;
-    private ListaEnlazada<Tweet> listaTweet;
     boolean isVerified;
     int userFavourites;
+    private ListaEnlazada<Tweet> listaTweet;
 
     public User(long idUser, String name, boolean isVerified, int userFavourites) {
         this.idUser = idUser;
@@ -66,7 +66,7 @@ public class User implements Comparable<User> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return idUser == user.idUser;
+        return name == user.name;
     }
 
     @Override

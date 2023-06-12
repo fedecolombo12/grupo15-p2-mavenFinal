@@ -10,8 +10,8 @@ public class Tweet implements Comparable<Tweet> {
     private String contentTweet;
     private String sourceTweet;
     private boolean isRetweet;
-    private ListaEnlazada<HashTag> hashTagTweet;
     private String date;
+    private ListaEnlazada<HashTag> hashTagTweet;
 
     public Tweet(long idTweet, String contentTweet, String sourceTweet, boolean isRetweet, User ownerTweet) {
         this.idTweet = idTweet;

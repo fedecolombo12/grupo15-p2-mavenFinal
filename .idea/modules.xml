@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/grupo15-p2-mavenFinal.iml" filepath="$PROJECT_DIR$/.idea/grupo15-p2-mavenFinal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/grupo15-p2-mavenFinal/grupo15-p2-mavenFinal.iml" filepath="$PROJECT_DIR$/grupo15-p2-mavenFinal/grupo15-p2-mavenFinal.iml" />
     </modules>
   </component>
 </project>

@@ -1,18 +1,22 @@
 package uy.edu.um.prog2.adt;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import uy.edu.um.prog2.adt.entities.*;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
+import uy.edu.um.prog2.adt.tads.Hash.*;
+import uy.edu.um.prog2.adt.tads.Heap.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.CSVParser;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.*;
 import java.time.LocalDate;
+import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
 
 import uy.edu.um.prog2.adt.exceptions.*;
@@ -100,25 +104,8 @@ public  class Main {
         }
         // driversLinkedList.imprimirLista();
     }
-    /*public static void getCsvInfo() throws FileNotValidException {
-        final String csvFile = "src/main/resources/f1_dataset_test.csv";
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
-             CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
-            for (CSVRecord csvRecord : csvParser) {
-                User user = new User();
-                Tweet tweet = new Tweet();
-                HashTag hashTag = new HashTag();
-                try {
-
-            }
-        } catch (IOException e) {
-            throw new FileNotValidException("FILE_ERROR_FORMAT", e);
-        }
-    }*/
     static ListaEnlazada<User> userList = new ListaEnlazada<>();
-    ListaEnlazada<Tweet> tweetList = new ListaEnlazada<>();
-    ListaEnlazada<HashTag> hashtagList = new ListaEnlazada<>();
-    public static void getCsvInfo() throws FileNotValidException {
+    public static void getCsvInfo() throws FileNotValidException, IOException {
         final String csvFile = "src/main/resources/f1_dataset_test.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
@@ -126,32 +113,56 @@ public  class Main {
             for (CSVRecord csvRecord : csvParser) {
                 String[] values = csvRecord.values();
                 try {
-                    User user = new User();
                     Tweet tweet = new Tweet();
                     HashTag hashTag = new HashTag();
-                    user.setName(values[1]);
-                    user.setUserFavourites(Integer.parseInt(values[7]));
-                    user.setVerified(Boolean.parseBoolean(values[8]));
-                    user.setIdUser(Integer.parseInt(values[0]));
-                    tweet.setRetweet(Boolean.parseBoolean(values[13]));
-                    tweet.setSourceTweet(values[12]);
-                    tweet.setContentTweet(values[10]);
-                    user.getlistaTweet().add(tweet);
-                    userList.add(user);
-                    //tweet.setHashTagTweet(values[11]);
-                    count = ++count;
-                } catch (Exception ignored) {
+                    User userToAnalise = buscarUsuario(values[1]);
+                    if (!userList.contains(userToAnalise)) { // Si el usuario no esta en la lista.
+                        User user = new User();
+                        user.setIdUser(Integer.parseInt(values[0]));
+                        user.setName(values[1]);
+                        user.setVerified(Boolean.parseBoolean(values[8]));
+                        user.setUserFavourites(Integer.parseInt(values[7]));
+                        //tweet.setIdTweet(nose);
+                        tweet.setContentTweet(values[10]);
+                        tweet.setSourceTweet(values[12]);
+                        tweet.setRetweet(Boolean.parseBoolean(values[13]));
+                        ///tweet.setDate(formattedDate);
+                        hashTag.setTextHashTag(Arrays.toString(values[11].split(",")));
+                        tweet.getHashTagTweet().add(hashTag);
+                        user.getlistaTweet().add(tweet);
+                        userList.add(user);
+                    } else { // Si ya esta en la lista, agrego el tweet a su lista de tweets y hashtag a lista de hashtag
+                        //tweet.setIdTweet(nose);
+                        tweet.setContentTweet(values[10]);
+                        tweet.setSourceTweet(values[12]);
+                        tweet.setRetweet(Boolean.parseBoolean(values[13]));
+                        //tweet.setDate(formattedDate);
+                        hashTag.setTextHashTag(Arrays.toString(values[11].split(",")));
+                        tweet.getHashTagTweet().add(hashTag);
+                        userToAnalise.getlistaTweet().add(tweet);
                     }
+
+                    } catch (Exception ignored) {
+                        }
+                }
+            } catch(IOException e){
+                throw new FileNotValidException("FILE_ERROR_FORMAT", e);
+                }
+    }
+    public static User buscarUsuario(String usuarioBuscado) {
+        for (int i = 0; i < userList.size(); i++) {
+            User usuarioActual = userList.get(i);
+            if (usuarioActual.equals(usuarioBuscado)) {
+                return usuarioActual; // Devuelve la posición del usuario encontrado
             }
-        } catch (IOException e) {
-            throw new FileNotValidException("FILE_ERROR_FORMAT", e);
         }
+        return null; // Si no se encuentra el usuario, se devuelve null
     }
 
-    public static void main(String[] args) throws FileNotValidException {
+    public static void main(String[] args) throws FileNotValidException, IOException {
         //getDriversFromFile();
         getCsvInfo();
-        System.out.println(userList);
+        //System.out.println(userList);
         //menu();
 
     }
