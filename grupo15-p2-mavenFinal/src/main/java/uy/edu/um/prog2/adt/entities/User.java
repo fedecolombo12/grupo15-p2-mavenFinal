@@ -5,19 +5,24 @@ import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 import java.util.Objects;
 
-public class User {
-    private long idUser;
+public class User implements Comparable<User> {
+    private long idUser = 0;
     private String name;
-    Lista<Tweet> listaTweet;
+    private ListaEnlazada<Tweet> listaTweet;
+    boolean isVerified;
+    int userFavourites;
 
-    public User(long idUser, String name) {
+    public User(long idUser, String name, boolean isVerified, int userFavourites) {
         this.idUser = idUser;
         this.name = name;
         this.listaTweet = new ListaEnlazada<>();
+        this.isVerified = isVerified;
+        this.userFavourites = userFavourites;
     }
 
     public User() {
-
+        this.idUser = ++idUser;;
+        this.listaTweet = new ListaEnlazada<>();
     }
 
     public long getIdUser() {
@@ -36,13 +41,25 @@ public class User {
         this.name = name;
     }
 
-    public Lista<Tweet> getlistaTweet() {
+    public ListaEnlazada<Tweet> getlistaTweet() {
         return listaTweet;
     }
 
-    public void setistaTweet(Lista<Tweet> listaTweet) {
+    public void setlistaTweet(ListaEnlazada<Tweet> listaTweet) {
         this.listaTweet = listaTweet;
     }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public int getUserFavourites() {return userFavourites;}
+
+    public void setUserFavourites(int userFavourites) {this.userFavourites = userFavourites;}
 
     @Override
     public boolean equals(Object o) {
@@ -57,4 +74,8 @@ public class User {
         return Objects.hash(idUser);
     }
 
+    @Override
+    public int compareTo(User o) {
+        return 0;
+    }
 }

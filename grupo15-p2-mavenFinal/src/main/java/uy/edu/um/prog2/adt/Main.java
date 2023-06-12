@@ -1,5 +1,8 @@
 package uy.edu.um.prog2.adt;
-import com.opencsv.CSVParser;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import uy.edu.um.prog2.adt.entities.*;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 import java.io.BufferedReader;
@@ -7,19 +10,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.time.LocalDate;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import uy.edu.um.prog2.adt.exceptions.*;
 
-public class Main {
+public  class Main {
     static void menu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Menu principal");
@@ -91,7 +89,7 @@ public class Main {
     }
     public static void getDriversFromFile() {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
-        String driversFile = "src/main/resources/drivers.txt";
+        final String driversFile = "src/main/resources/drivers.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(driversFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -100,29 +98,61 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //System.out.println(driversLinkedList.get(2)); //sergio perez, anda.
+        // driversLinkedList.imprimirLista();
     }
-    public static void getCsvInfo() {
-        var csvFile = "src/main/resources/f1_dataset.csv";
+    /*public static void getCsvInfo() throws FileNotValidException {
+        final String csvFile = "src/main/resources/f1_dataset_test.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             for (CSVRecord csvRecord : csvParser) {
                 User user = new User();
                 Tweet tweet = new Tweet();
                 HashTag hashTag = new HashTag();
-
                 try {
-                    //codigo pa leer el csv
-                } catch (Exception ignored) {
-                }
+
             }
         } catch (IOException e) {
-            throw new FileNotValidException(FILE_ERROR_FORMAT, e);
+            throw new FileNotValidException("FILE_ERROR_FORMAT", e);
+        }
+    }*/
+    static ListaEnlazada<User> userList = new ListaEnlazada<>();
+    ListaEnlazada<Tweet> tweetList = new ListaEnlazada<>();
+    ListaEnlazada<HashTag> hashtagList = new ListaEnlazada<>();
+    public static void getCsvInfo() throws FileNotValidException {
+        final String csvFile = "src/main/resources/f1_dataset_test.csv";
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
+             CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
+            int count = 0;
+            for (CSVRecord csvRecord : csvParser) {
+                String[] values = csvRecord.values();
+                try {
+                    User user = new User();
+                    Tweet tweet = new Tweet();
+                    HashTag hashTag = new HashTag();
+                    user.setName(values[1]);
+                    user.setUserFavourites(Integer.parseInt(values[7]));
+                    user.setVerified(Boolean.parseBoolean(values[8]));
+                    user.setIdUser(Integer.parseInt(values[0]));
+                    tweet.setRetweet(Boolean.parseBoolean(values[13]));
+                    tweet.setSourceTweet(values[12]);
+                    tweet.setContentTweet(values[10]);
+                    user.getlistaTweet().add(tweet);
+                    userList.add(user);
+                    //tweet.setHashTagTweet(values[11]);
+                    count = ++count;
+                } catch (Exception ignored) {
+                    }
+            }
+        } catch (IOException e) {
+            throw new FileNotValidException("FILE_ERROR_FORMAT", e);
         }
     }
-    public static void main(String[] args) {
-        getDriversFromFile();
+
+    public static void main(String[] args) throws FileNotValidException {
+        //getDriversFromFile();
         getCsvInfo();
-        menu();
+        System.out.println(userList);
+        //menu();
+
     }
 }

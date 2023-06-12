@@ -7,16 +7,30 @@ import java.util.Objects;
 public class HashTag implements Comparable<HashTag> {
     private long idHashTag;
     private String textHashTag;
-    private Lista<Tweet> tweetWithHashTag;
 
     public HashTag(long idHashTag, String textHashTag) {
-        this.idHashTag = idHashTag;
+        this.idHashTag = idHashTag + 1;
         this.textHashTag = textHashTag;
-        this.tweetWithHashTag = new ListaEnlazada<>();
     }
 
     public HashTag() {
+        this.idHashTag = idHashTag + 1;
+    }
 
+    public long getIdHashTag() {
+        return idHashTag;
+    }
+
+    public void setIdHashTag(long idHashTag) {
+        this.idHashTag = idHashTag;
+    }
+
+    public String getTextHashTag() {
+        return textHashTag;
+    }
+
+    public void setTextHashTag(String textHashTag) {
+        this.textHashTag = textHashTag;
     }
 
     @Override

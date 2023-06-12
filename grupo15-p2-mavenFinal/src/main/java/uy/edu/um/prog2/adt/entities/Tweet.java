@@ -1,6 +1,7 @@
 package uy.edu.um.prog2.adt.entities;
 
 import uy.edu.um.prog2.adt.tads.Lista.Lista;
+import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 import java.util.Objects;
 
@@ -9,16 +10,15 @@ public class Tweet implements Comparable<Tweet> {
     private String contentTweet;
     private String sourceTweet;
     private boolean isRetweet;
-    private User ownerTweet;
-    private Lista<HashTag> hashTagTweet;
-
+    private ListaEnlazada<HashTag> hashTagTweet;
+    private String date;
 
     public Tweet(long idTweet, String contentTweet, String sourceTweet, boolean isRetweet, User ownerTweet) {
         this.idTweet = idTweet;
         this.contentTweet = contentTweet;
         this.sourceTweet = sourceTweet;
         this.isRetweet = isRetweet;
-        this.ownerTweet = ownerTweet;
+        this.hashTagTweet = new ListaEnlazada<>();
     }
 
     public Tweet() {
@@ -70,24 +70,19 @@ public class Tweet implements Comparable<Tweet> {
         isRetweet = retweet;
     }
 
-    public User getOwnerTweet() {
-        return ownerTweet;
-    }
-
-    public void setOwnerTweet(User ownerTweet) {
-        this.ownerTweet = ownerTweet;
-    }
-
-    @Override
-    public int compareTo(Tweet o) {
-        return 0;
-    }
-
     public Lista<HashTag> getHashTagTweet() {
         return hashTagTweet;
     }
 
-    public void setHashTagTweet(Lista<HashTag> hashTagTweet) {
+    public void setHashTagTweet(ListaEnlazada<HashTag> hashTagTweet) {
         this.hashTagTweet = hashTagTweet;
+    }
+
+    public String getDate() {return date;}
+
+    public void setDate(String date) {this.date = date;}
+    @Override
+    public int compareTo(Tweet o) {
+        return 0;
     }
 }
