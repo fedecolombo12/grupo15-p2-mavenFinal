@@ -9,7 +9,7 @@ public class HashTag implements Comparable<HashTag> {
     private String textHashTag;
 
     public HashTag(long idHashTag, String textHashTag) {
-        this.idHashTag = idHashTag + 1;
+        this.idHashTag = idHashTag;
         this.textHashTag = textHashTag;
     }
 
