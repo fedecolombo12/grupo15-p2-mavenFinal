@@ -1,27 +1,24 @@
 package uy.edu.um.prog2.adt;
-import uy.edu.um.prog2.adt.entities.*;
-import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
-import uy.edu.um.prog2.adt.tads.Hash.*;
-import uy.edu.um.prog2.adt.tads.Heap.*;
+
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import uy.edu.um.prog2.adt.entities.HashTag;
+import uy.edu.um.prog2.adt.entities.Tweet;
+import uy.edu.um.prog2.adt.entities.User;
+import uy.edu.um.prog2.adt.exceptions.FileNotValidException;
+import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
 import java.time.LocalDate;
-import java.io.Reader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-
-
-import uy.edu.um.prog2.adt.exceptions.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public  class Main {
+
+
     static void menu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Menu principal");
@@ -105,13 +102,18 @@ public  class Main {
         // driversLinkedList.imprimirLista();
     }
     static ListaEnlazada<User> userList = new ListaEnlazada<>();
+
     public static void getCsvInfo() throws FileNotValidException, IOException {
         final String csvFile = "src/main/resources/f1_dataset_test.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             int count = 0;
             for (CSVRecord csvRecord : csvParser) {
-                String[] values = csvRecord.values();
+                for (String value : csvRecord) {
+                    System.out.print(value + " ");
+                }
+                System.out.println();
+            }
                 try {
                     Tweet tweet = new Tweet();
                     HashTag hashTag = new HashTag();
@@ -149,6 +151,8 @@ public  class Main {
                 throw new FileNotValidException("FILE_ERROR_FORMAT", e);
                 }
     }
+
+
     public static User buscarUsuario(String usuarioBuscado) {
         for (int i = 0; i < userList.size(); i++) {
             User usuarioActual = userList.get(i);
@@ -164,6 +168,5 @@ public  class Main {
         getCsvInfo();
         //System.out.println(userList);
         //menu();
-
     }
 }
