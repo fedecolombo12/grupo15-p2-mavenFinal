@@ -92,7 +92,7 @@ public  class Main {
 
     }
     public static void getDriversFromFile(ListaEnlazada<String> driversLinkedList) {
-        final String driversFile = "/Users/fede/Desktop/Obligatorio/grupo15-p2-mavenFinal/grupo15-p2-mavenFinal/src/main/resources/drivers.txt";
+        final String driversFile = "grupo15-p2-mavenFinal/src/main/resources/drivers.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(driversFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -111,8 +111,8 @@ public  class Main {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             csvParser.iterator().next();  // Salta la primera fila que contiene los nombres de las columnas
-            long userIdCounter = 1;
-            long hashtagIdCounter = 1;
+            long userIdCounter = 0;
+            long hashtagIdCounter = 0;
             for (CSVRecord csvRecord : csvParser) {
                 String[] values = csvRecord.values();
                 String username = values[1];
@@ -134,55 +134,26 @@ public  class Main {
                 tweet.setDate(values[9]);
                 String hashtagsColumn = values[11];
                 if (!hashtagsColumn.isEmpty()) {
-                    String[] hashtags = hashtagsColumn.split(",");
+                    String[] hashtags = hashtagsColumn.replace("[", "").replace("]","").replace("'","").split(", ");
                     for (String hashtagText : hashtags) {
                         String trimmedHashtagText = hashtagText.trim();
                         // Verifica si el hashtag ya existe en la lista
                         HashTag existingHashtag = buscarHashtagPorTexto(trimmedHashtagText, hashtagList);
                         if (existingHashtag != null) {
-                            //tweet.getHashTagTweet().add(existingHashtag);
-                        } else {
-                            // El hashtag no existe en la lista, crea uno nuevo y asigna un ID único
+                            tweet.getHashTagTweet().add(existingHashtag);
+                        } else { // El hashtag no existe en la lista, crea uno nuevo y asigna un ID único
                             HashTag hashtag = new HashTag();
                             hashtag.setIdHashTag(hashtagIdCounter++);
                             hashtag.setTextHashTag(trimmedHashtagText);
-                            // Agrega el nuevo hashtag a la lista y al tweet
-                            hashtagList.add(hashtag);
-                            //tweet.getHashTagTweet().add(hashtag);
+                            hashtagList.add(hashtag);  // Agrega el nuevo hashtag a la lista y al tweet
+                            tweet.getHashTagTweet().add(hashtag);
                         }
                     }
                 }
                 user.getlistaTweet().add(tweet);
+                var xd = 1;
             }
-                    /*Tweet tweet = new Tweet();
-                    HashTag hashTag = new HashTag();
-                    User userToAnalise = buscarUsuario(values[1],userList);
-                    if (!userList.contains(userToAnalise)) { // Si el usuario no esta en la lista.
-                        User user = new User();
-                        user.setName(values[1]);
-                        userList.add(user);
-                        user.setIdUser(Integer.parseInt(values[0]));
-                        user.setVerified(Boolean.parseBoolean(values[8]));
-                        user.setUserFavourites(Integer.parseInt(values[7]));
-                        //tweet.setIdTweet(nose);
-                        tweet.setContentTweet(values[10]);
-                        tweet.setSourceTweet(values[12]);
-                        tweet.setRetweet(Boolean.parseBoolean(values[13]));
-                        ///tweet.setDate(formattedDate);
-                        hashTag.setTextHashTag(Arrays.toString((values[11].split(","))));
-                        tweet.getHashTagTweet().add(hashTag);
-                        user.getlistaTweet().add(tweet);
-                        userList.add(user);
-                    } else { // Si ya esta en la lista, agrego el tweet a su lista de tweets y hashtag a lista de hashtag
-                        //tweet.setIdTweet(nose);
-                        tweet.setContentTweet(values[10]);
-                        tweet.setSourceTweet(values[12]);
-                        tweet.setRetweet(Boolean.parseBoolean(values[13]));
-                        //tweet.setDate(formattedDate);
-                        hashTag.setTextHashTag(Arrays.toString(values[11].split(",")));
-                        tweet.getHashTagTweet().add(hashTag);
-                        userToAnalise.getlistaTweet().add(tweet);
-                    }*/
+
         } catch(IOException e){
             throw new FileNotValidException("FILE_ERROR_FORMAT", e);
             }

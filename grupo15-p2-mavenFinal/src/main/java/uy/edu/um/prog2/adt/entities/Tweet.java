@@ -11,7 +11,7 @@ public class Tweet implements Comparable<Tweet> {
     private String sourceTweet;
     private boolean isRetweet;
     private String date;
-    private ListaEnlazada<HashTag> hashTagTweet;
+    private final ListaEnlazada<HashTag> hashTagTweet ;
 
     public Tweet(long idTweet, String contentTweet, String sourceTweet, boolean isRetweet, User ownerTweet) {
         this.idTweet = idTweet;
@@ -22,8 +22,9 @@ public class Tweet implements Comparable<Tweet> {
     }
 
     public Tweet() {
-
+        hashTagTweet = new ListaEnlazada<>();
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -72,10 +73,6 @@ public class Tweet implements Comparable<Tweet> {
 
     public Lista<HashTag> getHashTagTweet() {
         return hashTagTweet;
-    }
-
-    public void setHashTagTweet(ListaEnlazada<HashTag> hashTagTweet) {
-        this.hashTagTweet = hashTagTweet;
     }
 
     public String getDate() {return date;}
