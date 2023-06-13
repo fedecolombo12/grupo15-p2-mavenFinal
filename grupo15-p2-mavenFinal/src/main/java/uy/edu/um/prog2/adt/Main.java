@@ -91,9 +91,8 @@ public  class Main {
     static void numberOfTweetsWithASpecificWord() {
 
     }
-    public static void getDriversFromFile() {
-        ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
-        final String driversFile = "src/main/resources/drivers.txt";
+    public static void getDriversFromFile(ListaEnlazada<String> driversLinkedList) {
+        final String driversFile = "/Users/fede/Desktop/Obligatorio/grupo15-p2-mavenFinal/grupo15-p2-mavenFinal/src/main/resources/drivers.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(driversFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -102,24 +101,67 @@ public  class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // driversLinkedList.imprimirLista();
+        driversLinkedList.imprimirLista();
+
     }
-    static ListaEnlazada<User> userList = new ListaEnlazada<>();
     public static void getCsvInfo() throws FileNotValidException, IOException {
-        final String csvFile = "src/main/resources/f1_dataset_test.csv";
+        ListaEnlazada<User> userList = new ListaEnlazada<>();
+        ListaEnlazada<HashTag> hashtagList = new ListaEnlazada<>();
+        final String csvFile = "grupo15-p2-mavenFinal/src/main/resources/f1_dataset_test.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
-            int count = 0;
+            csvParser.iterator().next();  // Salta la primera fila que contiene los nombres de las columnas
+            long userIdCounter = 1;
+            long hashtagIdCounter = 1;
             for (CSVRecord csvRecord : csvParser) {
                 String[] values = csvRecord.values();
-                try {
-                    Tweet tweet = new Tweet();
+                String username = values[1];
+                User user = buscarUsuario(username, userList);
+                if (user == null) {// El usuario no existe en la lista, crea uno nuevo y establece sus atributos
+                    user = new User();
+                    user.setIdUser(userIdCounter++);
+                    user.setName(username);
+                    user.setVerified(Boolean.parseBoolean(values[8]));
+                    user.setUserFavourites((int) Double.parseDouble(values[7]));
+                    userList.add(user); // Agrega el usuario a la lista
+                }
+                Tweet tweet = new Tweet();
+                long tweetId = Long.parseLong(values[0]);
+                tweet.setIdTweet(tweetId);
+                tweet.setContentTweet(values[10]);
+                tweet.setSourceTweet(values[12]);
+                tweet.setRetweet(Boolean.parseBoolean(values[13]));
+                tweet.setDate(values[9]);
+                String hashtagsColumn = values[11];
+                if (!hashtagsColumn.isEmpty()) {
+                    String[] hashtags = hashtagsColumn.split(",");
+                    for (String hashtagText : hashtags) {
+                        String trimmedHashtagText = hashtagText.trim();
+                        // Verifica si el hashtag ya existe en la lista
+                        HashTag existingHashtag = buscarHashtagPorTexto(trimmedHashtagText, hashtagList);
+                        if (existingHashtag != null) {
+                            //tweet.getHashTagTweet().add(existingHashtag);
+                        } else {
+                            // El hashtag no existe en la lista, crea uno nuevo y asigna un ID único
+                            HashTag hashtag = new HashTag();
+                            hashtag.setIdHashTag(hashtagIdCounter++);
+                            hashtag.setTextHashTag(trimmedHashtagText);
+                            // Agrega el nuevo hashtag a la lista y al tweet
+                            hashtagList.add(hashtag);
+                            //tweet.getHashTagTweet().add(hashtag);
+                        }
+                    }
+                }
+                user.getlistaTweet().add(tweet);
+            }
+                    /*Tweet tweet = new Tweet();
                     HashTag hashTag = new HashTag();
-                    User userToAnalise = buscarUsuario(values[1]);
+                    User userToAnalise = buscarUsuario(values[1],userList);
                     if (!userList.contains(userToAnalise)) { // Si el usuario no esta en la lista.
                         User user = new User();
-                        user.setIdUser(Integer.parseInt(values[0]));
                         user.setName(values[1]);
+                        userList.add(user);
+                        user.setIdUser(Integer.parseInt(values[0]));
                         user.setVerified(Boolean.parseBoolean(values[8]));
                         user.setUserFavourites(Integer.parseInt(values[7]));
                         //tweet.setIdTweet(nose);
@@ -127,7 +169,7 @@ public  class Main {
                         tweet.setSourceTweet(values[12]);
                         tweet.setRetweet(Boolean.parseBoolean(values[13]));
                         ///tweet.setDate(formattedDate);
-                        hashTag.setTextHashTag(Arrays.toString(values[11].split(",")));
+                        hashTag.setTextHashTag(Arrays.toString((values[11].split(","))));
                         tweet.getHashTagTweet().add(hashTag);
                         user.getlistaTweet().add(tweet);
                         userList.add(user);
@@ -140,27 +182,35 @@ public  class Main {
                         hashTag.setTextHashTag(Arrays.toString(values[11].split(",")));
                         tweet.getHashTagTweet().add(hashTag);
                         userToAnalise.getlistaTweet().add(tweet);
-                    }
+                    }*/
+        } catch(IOException e){
+            throw new FileNotValidException("FILE_ERROR_FORMAT", e);
+            }
+            userList.imprimirLista();
 
-                    } catch (Exception ignored) {
-                        }
-                }
-            } catch(IOException e){
-                throw new FileNotValidException("FILE_ERROR_FORMAT", e);
-                }
     }
-    public static User buscarUsuario(String usuarioBuscado) {
+    public static User buscarUsuario(String usuarioBuscado, ListaEnlazada<User> userList) {
         for (int i = 0; i < userList.size(); i++) {
             User usuarioActual = userList.get(i);
-            if (usuarioActual.equals(usuarioBuscado)) {
+            if (usuarioActual != null && usuarioActual.equals(usuarioBuscado)) {
                 return usuarioActual; // Devuelve la posición del usuario encontrado
             }
         }
         return null; // Si no se encuentra el usuario, se devuelve null
     }
+    public static HashTag buscarHashtagPorTexto(String textoBuscado, ListaEnlazada<HashTag> hashtagList) {
+        for (int i = 0; i < hashtagList.size(); i++) {
+            HashTag hashtagActual = hashtagList.get(i);
+            if (hashtagActual != null && hashtagActual.getTextHashTag().equals(textoBuscado)) {
+                return hashtagActual;
+            }
+        }
+        return null;
+    }
 
     public static void main(String[] args) throws FileNotValidException, IOException {
-        //getDriversFromFile();
+        //ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
+        //getDriversFromFile(driversLinkedList);
         getCsvInfo();
         //System.out.println(userList);
         //menu();
