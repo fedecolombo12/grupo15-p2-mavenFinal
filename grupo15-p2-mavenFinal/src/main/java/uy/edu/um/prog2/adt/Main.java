@@ -114,6 +114,7 @@ public class Main {
             }
         }
         System.out.println("La cantidad de hashtags distintos para el dia " + date + " son " + numberOfDifferentHashTag);
+
     }
 
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
