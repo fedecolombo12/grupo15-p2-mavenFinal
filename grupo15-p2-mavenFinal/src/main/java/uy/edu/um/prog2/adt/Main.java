@@ -1,13 +1,10 @@
 package uy.edu.um.prog2.adt;
 import uy.edu.um.prog2.adt.entities.*;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-
-
 import uy.edu.um.prog2.adt.exceptions.*;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 
@@ -109,7 +106,8 @@ public class Main {
             if (readCSVImpl.getTweetList().get(i).getDate().equals(date)) {
                 for (int j = 0; j < readCSVImpl.getTweetList().get(i).getHashTagTweet().size() ; j++) {
                     long hashTagInList = readCSVImpl.getTweetList().get(i).getHashTagTweet().get(i).getIdHashTag();
-                    if (difHashTag.contains(hashTagInList)){
+                    if (!difHashTag.contains(hashTagInList)){
+                        difHashTag.add(hashTagInList);
                         numberOfDifferentHashTag++;
                     }
                 }
