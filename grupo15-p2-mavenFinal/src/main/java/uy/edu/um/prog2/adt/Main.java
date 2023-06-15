@@ -1,24 +1,11 @@
 package uy.edu.um.prog2.adt;
 import uy.edu.um.prog2.adt.entities.*;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
-import uy.edu.um.prog2.adt.tads.Hash.*;
-import uy.edu.um.prog2.adt.tads.Heap.*;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.csv.CSVParser;
-import uy.edu.um.prog2.adt.ReadCSV;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import uy.edu.um.prog2.adt.ReadCSV;
-import java.time.LocalDate;
-import java.io.Reader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.nio.file.Paths;
-import java.nio.file.Files;
 
 
 import uy.edu.um.prog2.adt.exceptions.*;
@@ -63,12 +50,16 @@ public class Main {
         System.out.println("Ingrese año en formato YYYY");
         Scanner scanYear = new Scanner(System.in);
         int optionYear = scanYear.nextInt();
-        System.out.println("Ingrese mes en formato MM");
-        Scanner scanMonth = new Scanner(System.in);
-        int optionMonth = scanMonth.nextInt();
-        scanMonth.close();
-        scanYear.close();
-        verify(optionMonth,optionYear);
+        if (optionYear == 2021 || optionYear == 2022){
+            System.out.println("Ingrese mes en formato MM");
+            Scanner scanMonth = new Scanner(System.in);
+            int optionMonth = scanMonth.nextInt();
+            scanMonth.close();
+            scanYear.close();
+            verify(optionMonth,optionYear);
+        } else {
+            throw new WrongDate("Ingrese un año dentro del rango");
+        }
     }
     public static void verify(int month, int year) throws WrongDate {
         if (year == 2021) {
@@ -127,13 +118,28 @@ public class Main {
         Scanner scanWord = new Scanner(System.in);
         String optionWord = scanWord.nextLine();
         scanWord.close();
-        int counterTweets = 0;
-        for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
+        //int counterTweets = 0;
+       /* for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
             if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
                 counterTweets++;
             }
+        }*/
+        for (int i = 0; i < readCSVImpl.getTweetList().size(); i++) {
+            function_6(readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase(), optionWord);
         }
-        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
+        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + "FALTA COUNTER ACA");
+    }
+
+    public static int function_6(String tweet, String word){
+        int countTweets = 0;
+        String[] words = tweet.split(" ");
+
+        for (String w : words){
+            if (w.equalsIgnoreCase(word)){
+                countTweets++;
+                }
+            }
+        return countTweets;
     }
 
     // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
