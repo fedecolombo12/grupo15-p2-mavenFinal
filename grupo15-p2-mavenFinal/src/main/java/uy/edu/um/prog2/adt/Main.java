@@ -6,11 +6,13 @@ import uy.edu.um.prog2.adt.tads.Heap.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.CSVParser;
+import uy.edu.um.prog2.adt.ReadCSV;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import uy.edu.um.prog2.adt.ReadCSV;
 import java.time.LocalDate;
 import java.io.Reader;
 import java.text.ParseException;
@@ -20,9 +22,11 @@ import java.nio.file.Files;
 
 
 import uy.edu.um.prog2.adt.exceptions.*;
+import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 
-public  class Main {
-    static void menu() {
+public class Main {
+    private static ReadCSV readCSVImpl;
+    static void menu() throws WrongDate {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Menu principal");
         System.out.println("Seleccione la opción del menú: ");
@@ -34,7 +38,7 @@ public  class Main {
         System.out.println("    6. Cantidad de tweets con una palabra o frase específicos");
         int option = scanner.nextInt();
         if (option == 1) {
-            mostTenActivePilotsInTweets();
+            function_1();
         } else if (option == 2) {
             topFifteenUsers();
         } else if(option == 3) {
@@ -53,44 +57,87 @@ public  class Main {
         }
         scanner.close();
     }
-    static void  mostTenActivePilotsInTweets() {
-        System.out.println("Ingrese mes");
+
+    // ----------------------------------------------- FUNCTION 1 ------------------------------------------------------
+    static void function_1() throws WrongDate {
+        System.out.println("Ingrese mes en formato MM");
         Scanner scanMonth = new Scanner(System.in);
         int optionMonth = scanMonth.nextInt();
         scanMonth.close();
+        System.out.println("Ingrese año en formato YYYY");
         Scanner scanYear = new Scanner(System.in);
-        int optionYear = scanMonth.nextInt();
+        int optionYear = scanYear.nextInt();
         scanYear.close();
-        //Hacer verificaciones
+        verify(optionMonth,optionYear);
     }
-    static void topFifteenUsers() {
-    }
-    public static void dateOk(Scanner scanner) {
-        System.out.print("Ingresa una fecha en formato YYYY-MM-DD: ");
-        String pendingDate = scanner.nextLine();
-        LocalDate date = LocalDate.parse(pendingDate);
-        LocalDate startDate = LocalDate.parse("2021-07-01");
-        LocalDate endDate = LocalDate.parse("2022-08-31");
-        if (date.isBefore(startDate) || date.isAfter(endDate)) {
-            dateOk(scanner);
+    public static void verify(int month, int year) throws WrongDate {
+        if (year == 2021) {
+            if (month >= 07 && month <= 12) {
+                mostTenActivePilotsInTweets();
+            }
+        } else if (year == 2022) {
+            if (month >= 01 && month <= 8) { // se arregla dsp
+                mostTenActivePilotsInTweets();
+            } else {
+                throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
+            }
+        } else {
+            throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
         }
     }
+    private static void mostTenActivePilotsInTweets() {
+
+    }
+
+    // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
+    static void topFifteenUsers() {
+    }
+
+    // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
     static void numberOfDifferentHashTagOnADay() {
-        Scanner scanDate = new Scanner(System.in);
-        dateOk(scanDate);
-        scanDate.close();
+
     }
+
+    // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
+
     static void mostUsedHashTag() {
-        Scanner scanTotalDate = new Scanner(System.in);
-        dateOk(scanTotalDate);
-        scanTotalDate.close();
-    }
-    static void topSevenUsersWithFav() {
 
     }
+
+    // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
+
+    static ListaEnlazada<String> topSevenUsersWithFav() {
+        ListaEnlazada<String> topSeven = new ListaEnlazada<>();
+        readCSVImpl.getUserList().quickSort();
+        NodoLista<User> nodo = readCSVImpl.getUserList().getPrimero();
+        int count = 0;
+        while (nodo != null && count < 7) {
+            User user = nodo.getValue(); // Obtener el usuario y la cantidad de favoritos
+            String cuenta = user.getName() + " - Favoritos: " + user.getUserFavourites();// Crear una cadena con el nombre del usuario y la cantidad de favoritos
+            topSeven.add(cuenta);
+            nodo = nodo.getSiguiente();
+            count++;
+        }
+        return topSeven;
+    }
+
+    // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
     static void numberOfTweetsWithASpecificWord() {
-
+        System.out.println("Ingrese la palabra");
+        Scanner scanWord = new Scanner(System.in);
+        String optionWord = scanWord.nextLine();
+        scanWord.close();
+        int counterTweets = 0;
+        for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
+            if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
+                counterTweets++;
+            }
+        }
+        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
     }
+
+    // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
+
     public static void getDriversFromFile(ListaEnlazada<String> driversLinkedList) {
         final String driversFile = "grupo15-p2-mavenFinal/src/main/resources/drivers.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(driversFile))) {
@@ -101,90 +148,12 @@ public  class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        driversLinkedList.imprimirLista();
-
     }
-    public static void getCsvInfo() throws FileNotValidException, IOException {
-        ListaEnlazada<User> userList = new ListaEnlazada<>();
-        ListaEnlazada<HashTag> hashtagList = new ListaEnlazada<>();
-        final String csvFile = "grupo15-p2-mavenFinal/src/main/resources/f1_dataset_test.csv";
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
-             CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
-            csvParser.iterator().next();  // Salta la primera fila que contiene los nombres de las columnas
-            long userIdCounter = 0;
-            long hashtagIdCounter = 0;
-            for (CSVRecord csvRecord : csvParser) {
-                String[] values = csvRecord.values();
-                String username = values[1];
-                User user = buscarUsuario(username, userList);
-                if (user == null) {// El usuario no existe en la lista, crea uno nuevo y establece sus atributos
-                    user = new User();
-                    user.setIdUser(userIdCounter++);
-                    user.setName(username);
-                    user.setVerified(Boolean.parseBoolean(values[8]));
-                    user.setUserFavourites((int) Double.parseDouble(values[7]));
-                    userList.add(user); // Agrega el usuario a la lista
-                }
-                Tweet tweet = new Tweet();
-                long tweetId = Long.parseLong(values[0]);
-                tweet.setIdTweet(tweetId);
-                tweet.setContentTweet(values[10]);
-                tweet.setSourceTweet(values[12]);
-                tweet.setRetweet(Boolean.parseBoolean(values[13]));
-                tweet.setDate(values[9]);
-                String hashtagsColumn = values[11];
-                if (!hashtagsColumn.isEmpty()) {
-                    String[] hashtags = hashtagsColumn.replace("[", "").replace("]","").replace("'","").split(", ");
-                    for (String hashtagText : hashtags) {
-                        String trimmedHashtagText = hashtagText.trim();
-                        // Verifica si el hashtag ya existe en la lista
-                        HashTag existingHashtag = buscarHashtagPorTexto(trimmedHashtagText, hashtagList);
-                        if (existingHashtag != null) {
-                            tweet.getHashTagTweet().add(existingHashtag);
-                        } else { // El hashtag no existe en la lista, crea uno nuevo y asigna un ID único
-                            HashTag hashtag = new HashTag();
-                            hashtag.setIdHashTag(hashtagIdCounter++);
-                            hashtag.setTextHashTag(trimmedHashtagText);
-                            hashtagList.add(hashtag);  // Agrega el nuevo hashtag a la lista y al tweet
-                            tweet.getHashTagTweet().add(hashtag);
-                        }
-                    }
-                }
-                user.getlistaTweet().add(tweet);
-                var xd = 1;
-            }
-
-        } catch(IOException e){
-            throw new FileNotValidException("FILE_ERROR_FORMAT", e);
-            }
-            userList.imprimirLista();
-
-    }
-    public static User buscarUsuario(String usuarioBuscado, ListaEnlazada<User> userList) {
-        for (int i = 0; i < userList.size(); i++) {
-            User usuarioActual = userList.get(i);
-            if (usuarioActual != null && usuarioActual.equals(usuarioBuscado)) {
-                return usuarioActual; // Devuelve la posición del usuario encontrado
-            }
-        }
-        return null; // Si no se encuentra el usuario, se devuelve null
-    }
-    public static HashTag buscarHashtagPorTexto(String textoBuscado, ListaEnlazada<HashTag> hashtagList) {
-        for (int i = 0; i < hashtagList.size(); i++) {
-            HashTag hashtagActual = hashtagList.get(i);
-            if (hashtagActual != null && hashtagActual.getTextHashTag().equals(textoBuscado)) {
-                return hashtagActual;
-            }
-        }
-        return null;
-    }
-
-    public static void main(String[] args) throws FileNotValidException, IOException {
-        //ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
-        //getDriversFromFile(driversLinkedList);
-        getCsvInfo();
-        //System.out.println(userList);
-        //menu();
-
+    public static void main(String[] args) throws FileNotValidException, IOException, WrongDate {
+        ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
+        readCSVImpl = new ReadCSV();
+        getDriversFromFile(driversLinkedList);
+        //readCSVImpl.getCsvInfo(); Probalo asi y anda, si le sacas las //, no larga el menu y tampoco ejecuta el getcsvinfo
+        menu();
     }
 }
