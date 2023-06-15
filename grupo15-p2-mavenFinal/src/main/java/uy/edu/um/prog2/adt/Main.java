@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import uy.edu.um.prog2.adt.ReadCSV;
 import java.time.LocalDate;
 import java.io.Reader;
 import java.text.ParseException;
@@ -21,9 +22,10 @@ import java.nio.file.Files;
 
 
 import uy.edu.um.prog2.adt.exceptions.*;
+import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 
-public  class Main {
-    static ReadCSV readCSVImpl = new ReadCSV();
+public class Main {
+    private static ReadCSV readCSVImpl;
     static void menu() throws WrongDate {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Menu principal");
@@ -46,7 +48,7 @@ public  class Main {
         } else if (option == 5) {
             topSevenUsersWithFav();
         } else if (option == 6) {
-            inputWord();
+            numberOfTweetsWithASpecificWord();
         } else if (option == 0) {
             System.out.println("El programa finalizo. Muchas gracias.");
         } else {
@@ -56,10 +58,7 @@ public  class Main {
         scanner.close();
     }
 
-    private static void mostTenActivePilotsInTweets() {
-
-    }
-
+    // ----------------------------------------------- FUNCTION 1 ------------------------------------------------------
     static void function_1() throws WrongDate {
         System.out.println("Ingrese mes en formato MM");
         Scanner scanMonth = new Scanner(System.in);
@@ -71,8 +70,6 @@ public  class Main {
         scanYear.close();
         verify(optionMonth,optionYear);
     }
-    static void topFifteenUsers() {
-    }
     public static void verify(int month, int year) throws WrongDate {
         if (year == 2021) {
             if (month >= 07 && month <= 12) {
@@ -81,36 +78,66 @@ public  class Main {
         } else if (year == 2022) {
             if (month >= 01 && month <= 8) { // se arregla dsp
                 mostTenActivePilotsInTweets();
+            } else {
+                throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
             }
         } else {
-            throw new WrongDate("Ingresar una fecha dentro de ese rango");
+            throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
         }
     }
+    private static void mostTenActivePilotsInTweets() {
+
+    }
+
+    // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
+    static void topFifteenUsers() {
+    }
+
+    // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
     static void numberOfDifferentHashTagOnADay() {
 
     }
+
+    // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
+
     static void mostUsedHashTag() {
 
     }
-    static void topSevenUsersWithFav() {
 
+    // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
+
+    static ListaEnlazada<String> topSevenUsersWithFav() {
+        ListaEnlazada<String> topSeven = new ListaEnlazada<>();
+        readCSVImpl.getUserList().quickSort();
+        NodoLista<User> nodo = readCSVImpl.getUserList().getPrimero();
+        int count = 0;
+        while (nodo != null && count < 7) {
+            User user = nodo.getValue(); // Obtener el usuario y la cantidad de favoritos
+            String cuenta = user.getName() + " - Favoritos: " + user.getUserFavourites();// Crear una cadena con el nombre del usuario y la cantidad de favoritos
+            topSeven.add(cuenta);
+            nodo = nodo.getSiguiente();
+            count++;
+        }
+        return topSeven;
     }
-    public static void inputWord()  {
+
+    // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
+    static void numberOfTweetsWithASpecificWord() {
         System.out.println("Ingrese la palabra");
         Scanner scanWord = new Scanner(System.in);
         String optionWord = scanWord.nextLine();
         scanWord.close();
-        numberOfTweetsWithASpecificWord(optionWord);
-    }
-    static void numberOfTweetsWithASpecificWord(String word) {
         int counterTweets = 0;
         for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
-            if (readCSVImpl.getTweetList().get(i).getContentTweet().contains(word)) {
+            if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
                 counterTweets++;
             }
         }
-        System.out.println("La cantidad de Tweets con la palabra" + word + "son" + counterTweets);
+        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
     }
+
+    // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
+
     public static void getDriversFromFile(ListaEnlazada<String> driversLinkedList) {
         final String driversFile = "grupo15-p2-mavenFinal/src/main/resources/drivers.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(driversFile))) {
@@ -121,14 +148,12 @@ public  class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        driversLinkedList.imprimirLista();
-
     }
     public static void main(String[] args) throws FileNotValidException, IOException, WrongDate {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
+        readCSVImpl = new ReadCSV();
         getDriversFromFile(driversLinkedList);
+        //readCSVImpl.getCsvInfo(); Probalo asi y anda, si le sacas las //, no larga el menu y tampoco ejecuta el getcsvinfo
         menu();
-
-
     }
 }

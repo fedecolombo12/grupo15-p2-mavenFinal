@@ -13,12 +13,13 @@ public class Tweet implements Comparable<Tweet> {
     private String date;
     private final ListaEnlazada<HashTag> hashTagTweet ;
 
-    public Tweet(long idTweet, String contentTweet, String sourceTweet, boolean isRetweet, User ownerTweet) {
+    public Tweet(long idTweet, String contentTweet, String sourceTweet, boolean isRetweet, ListaEnlazada<HashTag> hashTagTweet, String date) {
         this.idTweet = idTweet;
         this.contentTweet = contentTweet;
         this.sourceTweet = sourceTweet;
         this.isRetweet = isRetweet;
         this.hashTagTweet = new ListaEnlazada<>();
+        this.date = date;
     }
 
     public Tweet() {
