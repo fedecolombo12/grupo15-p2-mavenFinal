@@ -48,7 +48,7 @@ public class ReadCSV {
     public void getCsvInfo() throws FileNotValidException, IOException {
         final String csvFile = "grupo15-p2-mavenFinal/src/main/resources/f1_dataset_test.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
-             CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
+            CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             csvParser.iterator().next();  // Salta la primera fila que contiene los nombres de las columnas
             long userIdCounter = 0;
             long hashtagIdCounter = 0;

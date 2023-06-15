@@ -126,6 +126,11 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
         return;
     }
 
+    @Override
+    public void quickSort() {
+
+    }
+
     public void print() {
         NodoHash<K, V> current = first;
         for (int i = 0; i < this.size(); i++) {
