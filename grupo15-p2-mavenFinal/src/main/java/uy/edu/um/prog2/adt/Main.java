@@ -118,29 +118,15 @@ public class Main {
         Scanner scanWord = new Scanner(System.in);
         String optionWord = scanWord.nextLine();
         scanWord.close();
-        //int counterTweets = 0;
-       /* for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
+       int counterTweets = 0;
+       for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
             if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
                 counterTweets++;
             }
-        }*/
-        for (int i = 0; i < readCSVImpl.getTweetList().size(); i++) {
-            function_6(readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase(), optionWord);
         }
-        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + "FALTA COUNTER ACA");
+        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
     }
 
-    public static int function_6(String tweet, String word){
-        int countTweets = 0;
-        String[] words = tweet.split(" ");
-
-        for (String w : words){
-            if (w.equalsIgnoreCase(word)){
-                countTweets++;
-                }
-            }
-        return countTweets;
-    }
 
     // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
 
