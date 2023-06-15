@@ -60,13 +60,13 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 1 ------------------------------------------------------
     static void function_1() throws WrongDate {
+        System.out.println("Ingrese año en formato YYYY");
+        Scanner scanYear = new Scanner(System.in);
+        int optionYear = scanYear.nextInt();
         System.out.println("Ingrese mes en formato MM");
         Scanner scanMonth = new Scanner(System.in);
         int optionMonth = scanMonth.nextInt();
         scanMonth.close();
-        System.out.println("Ingrese año en formato YYYY");
-        Scanner scanYear = new Scanner(System.in);
-        int optionYear = scanYear.nextInt();
         scanYear.close();
         verify(optionMonth,optionYear);
     }
