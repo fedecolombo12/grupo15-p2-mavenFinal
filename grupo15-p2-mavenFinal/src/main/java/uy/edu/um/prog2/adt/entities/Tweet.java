@@ -26,20 +26,6 @@ public class Tweet implements Comparable<Tweet> {
         hashTagTweet = new ListaEnlazada<>();
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tweet tweet = (Tweet) o;
-        return idTweet == tweet.idTweet;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idTweet);
-    }
-
     public long getIdTweet() {
         return idTweet;
     }
@@ -82,5 +68,18 @@ public class Tweet implements Comparable<Tweet> {
     @Override
     public int compareTo(Tweet o) {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tweet tweet = (Tweet) o;
+        return Objects.equals(date, tweet.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date);
     }
 }

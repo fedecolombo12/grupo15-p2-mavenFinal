@@ -25,11 +25,11 @@ public class Main {
         System.out.println("    6. Cantidad de tweets con una palabra o frase específicos");
         int option = scanner.nextInt();
         if (option == 1) {
-            function_1();
+            date_function_1();
         } else if (option == 2) {
             topFifteenUsers();
         } else if(option == 3) {
-            numberOfDifferentHashTagOnADay();
+            date_function_3();
         } else if (option == 4) {
             mostUsedHashTag();
         } else if (option == 5) {
@@ -46,7 +46,7 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 1 ------------------------------------------------------
-    static void function_1() throws WrongDate {
+    static void date_function_1() throws WrongDate {
         System.out.println("Ingrese año en formato YYYY");
         Scanner scanYear = new Scanner(System.in);
         int optionYear = scanYear.nextInt();
@@ -56,24 +56,13 @@ public class Main {
             int optionMonth = scanMonth.nextInt();
             scanMonth.close();
             scanYear.close();
-            verify(optionMonth,optionYear);
-        } else {
-            throw new WrongDate("Ingrese un año dentro del rango");
-        }
-    }
-    public static void verify(int month, int year) throws WrongDate {
-        if (year == 2021) {
-            if (month >= 07 && month <= 12) {
-                mostTenActivePilotsInTweets();
-            }
-        } else if (year == 2022) {
-            if (month >= 01 && month <= 8) { // se arregla dsp
+            if ((optionYear == 2021 && optionMonth >= 07 && optionMonth <= 12) || (optionYear == 2022 && optionMonth >= 01 && optionMonth <= 8)){
                 mostTenActivePilotsInTweets();
             } else {
                 throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
             }
         } else {
-            throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
+            throw new WrongDate("Ingrese un año dentro del rango");
         }
     }
     private static void mostTenActivePilotsInTweets() {
@@ -85,8 +74,48 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
-    static void numberOfDifferentHashTagOnADay() {
-
+    static void date_function_3() throws WrongDate {
+        System.out.println("Ingrese año en formato YYYY");
+        Scanner scanYear = new Scanner(System.in);
+        int optionYear = scanYear.nextInt();
+        if (optionYear == 2021 || optionYear == 2022){
+            System.out.println("Ingrese mes en formato MM");
+            Scanner scanMonth = new Scanner(System.in);
+            int optionMonth = scanMonth.nextInt();
+            scanMonth.close();
+            scanYear.close();
+            if ((optionYear == 2021 && optionMonth >= 07 && optionMonth <= 12) || (optionYear == 2022 && optionMonth >= 01 && optionMonth <= 8)){
+                System.out.println("Ingrese dia en formato DD");
+                Scanner scanDay = new Scanner(System.in);
+                int optionDay = scanDay.nextInt();
+                scanDay.close();
+                if (optionDay >= 01 && optionDay <= 31) {
+                    String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
+                    numberOfDifferentHashTagOnADay(totalDate);
+                } else {
+                    throw new WrongDate("Ingresar una fecha dentro del rango 2021-07-01 y 2022-08-31");
+                }
+            } else {
+                throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
+            }
+        } else {
+            throw new WrongDate("Ingrese un año dentro del rango");
+        }
+    }
+    static void numberOfDifferentHashTagOnADay(String date) {
+        ListaEnlazada<Long> difHashTag = new ListaEnlazada<>();
+        int numberOfDifferentHashTag = 0;
+        for (int i = 0; i < readCSVImpl.getTweetList().size(); i++) {
+            if (readCSVImpl.getTweetList().get(i).getDate().equals(date)) {
+                for (int j = 0; j < readCSVImpl.getTweetList().get(i).getHashTagTweet().size() ; j++) {
+                    long hashTagInList = readCSVImpl.getTweetList().get(i).getHashTagTweet().get(i).getIdHashTag();
+                    if (difHashTag.contains(hashTagInList)){
+                        numberOfDifferentHashTag++;
+                    }
+                }
+            }
+        }
+        System.out.println("La cantidad de hashtags distintos para el dia " + date + " son " + numberOfDifferentHashTag);
     }
 
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
@@ -118,30 +147,14 @@ public class Main {
         Scanner scanWord = new Scanner(System.in);
         String optionWord = scanWord.nextLine();
         scanWord.close();
-        //int counterTweets = 0;
-       /* for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
+        int counterTweets = 0;
+        for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
             if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
                 counterTweets++;
             }
-        }*/
-        for (int i = 0; i < readCSVImpl.getTweetList().size(); i++) {
-            function_6(readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase(), optionWord);
         }
-        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + "FALTA COUNTER ACA");
+        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
     }
-
-    public static int function_6(String tweet, String word){
-        int countTweets = 0;
-        String[] words = tweet.split(" ");
-
-        for (String w : words){
-            if (w.equalsIgnoreCase(word)){
-                countTweets++;
-                }
-            }
-        return countTweets;
-    }
-
     // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
 
     public static void getDriversFromFile(ListaEnlazada<String> driversLinkedList) {
