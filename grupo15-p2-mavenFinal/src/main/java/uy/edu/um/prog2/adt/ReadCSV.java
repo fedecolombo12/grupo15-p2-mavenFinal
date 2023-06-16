@@ -11,6 +11,8 @@ import org.apache.commons.csv.CSVParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.LocalDate;
 import java.io.Reader;
@@ -23,29 +25,18 @@ public class ReadCSV {
     public ListaEnlazada<User> userList = new ListaEnlazada<>();
     public ListaEnlazada<HashTag> hashtagList = new ListaEnlazada<>();
     public ListaEnlazada<Tweet> tweetList = new ListaEnlazada<>();
-
     public ListaEnlazada<User> getUserList() {
         return userList;
     }
-
-    public void setUserList(ListaEnlazada<User> userList) {
-        this.userList = userList;
-    }
     public ListaEnlazada<HashTag> getHashtagList() {
         return hashtagList;
-    }
-    public void setHashtagList(ListaEnlazada<HashTag> hashtagList) {
-        this.hashtagList = hashtagList;
     }
     public ListaEnlazada<Tweet> getTweetList() {
         return tweetList;
     }
 
-    public void setTweetList(ListaEnlazada<Tweet> tweetList) {
-        this.tweetList = tweetList;
-    }
 
-    public void getCsvInfo() throws FileNotValidException, IOException {
+    public void getCsvInfo() throws FileNotValidException {
         final String csvFile = "grupo15-p2-mavenFinal/src/main/resources/f1_dataset_test.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
             CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
@@ -67,10 +58,13 @@ public class ReadCSV {
                 Tweet tweet = new Tweet();
                 long tweetId = Long.parseLong(values[0]);
                 tweet.setIdTweet(tweetId);
-                tweet.setContentTweet(values[10]);
+                tweet.setContentTweet(values[10].toLowerCase());
                 tweet.setSourceTweet(values[12]);
                 tweet.setRetweet(Boolean.parseBoolean(values[13]));
-                tweet.setDate(values[9]);
+                String dateFormat = values[9];
+                LocalDateTime dateTime = LocalDateTime.parse(dateFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-DD"));
+                tweet.setDate(dateString);
                 String hashtagsColumn = values[11];
                 if (!hashtagsColumn.isEmpty()) {
                     String[] hashtags = hashtagsColumn.replace("[", "").replace("]", "").replace("'", "").split(", ");
@@ -92,7 +86,6 @@ public class ReadCSV {
                 user.getlistaTweet().add(tweet);
                 tweetList.add(tweet);
             }
-
         } catch (IOException e) {
             throw new FileNotValidException("FILE_ERROR_FORMAT", e);
         }
