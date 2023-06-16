@@ -12,6 +12,7 @@ public class Tweet implements Comparable<Tweet> {
     private boolean isRetweet;
     private String date;
     private final ListaEnlazada<HashTag> hashTagTweet ;
+    private User user;
 
     public Tweet(long idTweet, String contentTweet, String sourceTweet, boolean isRetweet, ListaEnlazada<HashTag> hashTagTweet, String date) {
         this.idTweet = idTweet;
@@ -65,10 +66,20 @@ public class Tweet implements Comparable<Tweet> {
     public String getDate() {return date;}
 
     public void setDate(String date) {this.date = date;}
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public int compareTo(Tweet o) {
         return 0;
     }
+
 
     @Override
     public boolean equals(Object o) {

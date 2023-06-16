@@ -1,5 +1,6 @@
 package uy.edu.um.prog2.adt;
 import uy.edu.um.prog2.adt.entities.*;
+import uy.edu.um.prog2.adt.tads.Hash.MyHash;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.util.*;
 import uy.edu.um.prog2.adt.exceptions.*;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
+import uy.edu.um.prog2.adt.tads.Hash.*;
 
 public class Main {
     private static ReadCSV readCSVImpl;
@@ -69,6 +71,56 @@ public class Main {
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
     static void topFifteenUsers() {
     }
+
+    /* REVISAR
+
+    public static void getTopFifteen(List<Tweet> listOfTweets){
+        // El tamaño de la tabla se puede cambiar
+        MyHash<String, User> usersHash = new TablaHash<>(50);
+
+        for (Tweet tweets : listOfTweets){
+            User userName = tweets.getUser();
+            String user = userName.getName();
+
+            // Chequeo si el usuario ya está en el Hash o no
+            if (!usersHash.contains(user)){
+                // lo agrego a la tabla
+                usersHash.put(user, userName);
+            }
+
+            User newUser = usersHash.get(user);
+            newUser.getCountTweets();
+            }
+
+        List<User> topUser = getTopUsers(usersHash,15);
+
+        for (User user: topUser){
+            System.out.println("Usuario: " + user + ", cantidad de tweets: " + user.getCountTweets());
+        }
+
+     */
+
+
+
+        /*
+        REVISAR
+        public static List<User> getTopUsers(MyHash<String,User> userMyHash, int n){
+        List<User> users = new ArrayList<>(userMyHash.size());
+
+            for (int i = 0; i < users.size() ; i++) {
+                ListaHash<String,User> bucket =
+
+            NodoHash<String, User> aux = bucket.getFirst();
+            while (aux != null){
+                users.add(aux.getData());
+                aux = aux.getNext();
+            }
+        }
+        Collections.sort(users, Comparator.comparingInt(User::getCountTweets).reversed());
+        return users.subList(0, Math.min(n, users.size()));
+        }
+    */
+
 
     // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
     static void date_function_3() throws WrongDate {

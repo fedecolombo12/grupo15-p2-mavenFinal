@@ -1,9 +1,12 @@
 package uy.edu.um.prog2.adt.tads.Hash;
 
+import uy.edu.um.prog2.adt.entities.User;
+
 public class TablaHash<K, V> implements MyHash<K, V> {
 
-    ListaHash<K,V>[] buckets;
+    private ListaHash<K,V>[] buckets;
     int size;
+
 
     public TablaHash(int size) {
         this.size = size;
@@ -82,5 +85,16 @@ public class TablaHash<K, V> implements MyHash<K, V> {
     @Override
     public boolean isEmpty() {
         return size() == 0;
+    }
+
+    public ListaHash<K, V>[] getBuckets(int index) throws Exception {
+        if (index < 0 || index >= size){
+            throw new Exception();
+        }
+        return new ListaHash[]{buckets[index]};
+    }
+
+    public void setBuckets(ListaHash<K, V>[] buckets) {
+        this.buckets = buckets;
     }
 }

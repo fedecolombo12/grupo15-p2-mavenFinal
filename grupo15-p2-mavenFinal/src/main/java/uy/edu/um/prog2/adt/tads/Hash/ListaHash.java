@@ -42,8 +42,7 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     }
 
     @Override
-    public boolean contains(NodoHash<K, V> value) {
-        return false;
+    public boolean contains(NodoHash<K, V> value) { return false;
     }
 
     public V get(K key) {
@@ -156,4 +155,6 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     public void setLast(NodoHash<K, V> last) {
         this.last = last;
     }
+
+
 }

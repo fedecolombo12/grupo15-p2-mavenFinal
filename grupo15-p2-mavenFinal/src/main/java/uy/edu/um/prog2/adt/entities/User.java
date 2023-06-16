@@ -12,6 +12,8 @@ public class User implements Comparable<User> {
     int userFavourites;
     private ListaEnlazada<Tweet> listaTweet;
 
+    private int countTweets;
+
     public User(long idUser, String name, boolean isVerified, int userFavourites) {
         this.idUser = idUser;
         this.name = name;
@@ -60,6 +62,14 @@ public class User implements Comparable<User> {
     public int getUserFavourites() {return userFavourites;}
 
     public void setUserFavourites(int userFavourites) {this.userFavourites = userFavourites;}
+
+    public void setCountTweets(int countTweets){
+        this.countTweets = countTweets;
+    }
+
+    public int getCountTweets(){
+        return countTweets;
+    }
 
     @Override
     public boolean equals(Object o) {
