@@ -160,7 +160,7 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
 
-    static ListaEnlazada<String> topSevenUsersWithFav() {
+    static void topSevenUsersWithFav() {
         ListaEnlazada<String> topSeven = new ListaEnlazada<>();
         readCSVImpl.getUserList().quickSort();
         NodoLista<User> nodo = readCSVImpl.getUserList().getPrimero();
@@ -172,7 +172,7 @@ public class Main {
             nodo = nodo.getSiguiente();
             count++;
         }
-        return topSeven;
+        topSeven.imprimirLista();
     }
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
@@ -182,7 +182,7 @@ public class Main {
         String optionWord = scanWord.nextLine();
         scanWord.close();
         int counterTweets = 0;
-        for (int i = 1; i < readCSVImpl.getTweetList().size() ; i++) {
+        for (int i = 1; i <= readCSVImpl.getTweetList().size() ; i++) {
             if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
                 counterTweets++;
             }

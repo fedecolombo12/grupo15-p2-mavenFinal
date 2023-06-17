@@ -75,7 +75,6 @@ public class ReadCSV {
                         }
                     }
                     tweet.setHashTagTweet(hashTagTweet);
-                    tweetList.add(tweet);
                 } catch (Exception Ignored) {
                     }
             }
