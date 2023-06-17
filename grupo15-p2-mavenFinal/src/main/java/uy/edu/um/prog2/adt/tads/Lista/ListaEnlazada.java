@@ -219,6 +219,19 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
     public void quickSort() {
         primero = quickSortRecursivo(getPrimero(), getUltimo());
     }
+
+    @Override
+    public NodoLista<T> searchT(T value) {
+        NodoLista<T> aux = getPrimero();
+        while (aux != null) {
+            if (aux.getValue().equals(value)) {
+                return aux;
+            }
+            aux = aux.getSiguiente();
+        }
+        return null; // El valor no se encontró en la lista
+    }
+
     public NodoLista<T> quickSortRecursivo(NodoLista<T> inicio, NodoLista<T> fin) {
         if (inicio == null || inicio == fin) {
             return inicio;
@@ -259,4 +272,6 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
         fin.setValue(temp);
         return i;
     }
+
+
 }

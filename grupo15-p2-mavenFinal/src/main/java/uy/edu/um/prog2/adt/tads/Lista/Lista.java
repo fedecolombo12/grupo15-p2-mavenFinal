@@ -12,5 +12,6 @@ public interface Lista<T extends Comparable<T>> {
     void addOrder(T value);
     void imprimirLista();
     void quickSort();
+    NodoLista<T> searchT (T value);
 }
 

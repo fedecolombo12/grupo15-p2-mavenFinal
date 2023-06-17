@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="grupo15-p2-mavenFinal" options="--add-exports java.base/jdk.internal.util=ALL-UNNAMED" />
+      <module name="grupo15-p2-mavenFinal" options="" />
     </option>
   </component>
 </project>
