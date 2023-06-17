@@ -54,14 +54,13 @@ public class Main {
     para que se "rompa" el programa.
     */
     private static void mostTenActivePilotsInTweets() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese año en formato YYYY");
-        Scanner scanYear = new Scanner(System.in);
-        int optionYear = scanYear.nextInt();
+        int optionYear = scanner.nextInt();
         System.out.println("Ingrese mes en formato MM");
-        Scanner scanMonth = new Scanner(System.in);
-        int optionMonth = scanMonth.nextInt();
-        scanMonth.close();
-        scanYear.close();
+        int optionMonth = scanner.nextInt();
+        scanner.close();
+        String totalDate = optionYear + "-" + optionMonth;
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
@@ -124,25 +123,21 @@ public class Main {
     cantidad de Hashtags diferentes en un dia.*/
     static void numberOfDifferentHashTagOnADay() {
         System.out.println("Ingrese año en formato YYYY");
-        Scanner scanYear = new Scanner(System.in);
-        int optionYear = scanYear.nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int optionYear = scanner.nextInt();
         System.out.println("Ingrese mes en formato MM");
-        Scanner scanMonth = new Scanner(System.in);
-        int optionMonth = scanMonth.nextInt();
+        int optionMonth = scanner.nextInt();
         System.out.println("Ingrese dia en formato DD");
-        Scanner scanDay = new Scanner(System.in);
-        int optionDay = scanDay.nextInt();
-        scanDay.close();
-        scanMonth.close();
-        scanYear.close();
+        int optionDay = scanner.nextInt();
+        scanner.close();
         String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
-        ListaEnlazada<Long> difHashTag = new ListaEnlazada<>();
+        ListaEnlazada<String> difHashTag = new ListaEnlazada<>();
         int numberOfDifferentHashTag = 0;
-        for (int i = 0; i < readCSVImpl.getTweetList().size(); i++) {
+        for (int i = 1; i <= readCSVImpl.getTweetList().size(); i++) {
             if (readCSVImpl.getTweetList().get(i).getDate().equals(totalDate)) {
-                for (int j = 0; j < readCSVImpl.getTweetList().get(i).getHashTagTweet().size() ; j++) {
-                    long hashTagInList = readCSVImpl.getTweetList().get(i).getHashTagTweet().get(i).getIdHashTag();
-                    if (!difHashTag.contains(hashTagInList)){
+                for (int j = 1; j <= readCSVImpl.getTweetList().get(i).getHashTagTweet().size() ; j++) {
+                    String hashTagInList = readCSVImpl.getTweetList().get(i).getHashTagTweet().get(j).getTextHashTag().toLowerCase();
+                    if (!(difHashTag.contains((hashTagInList)))){
                         difHashTag.add(hashTagInList);
                         numberOfDifferentHashTag++;
                     }

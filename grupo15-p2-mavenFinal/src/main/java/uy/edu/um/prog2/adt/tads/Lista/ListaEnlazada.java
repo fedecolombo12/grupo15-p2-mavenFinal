@@ -128,15 +128,14 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
 
     @Override
     public boolean contains(T value) {
-        boolean ok = false;
         NodoLista<T> aux = getPrimero();
-        while (aux != null && aux.getValue() != value) {
+        while (aux != null) {
+            if (aux.getValue().equals(value)) {
+                return true;
+            }
             aux = aux.getSiguiente();
         }
-        if (aux != null) {
-            ok = true;
-        }
-        return ok;
+        return false;
     }
     @Override
     public int size() {
