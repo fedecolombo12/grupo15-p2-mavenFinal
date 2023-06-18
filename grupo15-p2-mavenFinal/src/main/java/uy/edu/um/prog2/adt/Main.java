@@ -72,20 +72,20 @@ public class Main {
         while (tweet != null){
             NodoLista<String> driver = driversListaEnlazada.getPrimero();
             String dateTweet = tweet.getValue().getDate();
-            String[] dateTweetArray = dateTweet.split("-");
-            int year = Integer.parseInt(dateTweetArray[0]);
-            int month = Integer.parseInt(dateTweetArray[1]);
+            String[] dateTweetA = dateTweet.split("-");
+            int year = Integer.parseInt(dateTweetA[0]);
+            int month = Integer.parseInt(dateTweetA[1]);
             if (optionYear == year && optionMonth == month ){
                 while (driver != null){
                 String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
                 String driverName = driver.getValue().toLowerCase();
 
-                if (!hash.contains(driver.getValue().toLowerCase())){
-                    hash.put(driver.getValue().toLowerCase(),0);
+                if (!hash.contains(driverName)){
+                    hash.put(driverName,0);
                 }
                 if ((contentTweet.toLowerCase().contains(driverName))){
-                    int count = hash.get(driver.getValue().toLowerCase());
-                    hash.put(driver.getValue().toLowerCase(), count + 1);
+                    int count = hash.get(driverName);
+                    hash.put(driverName, count + 1);
                 }
                 driver = driver.getSiguiente();
             }
@@ -97,10 +97,10 @@ public class Main {
             try {
                 ListaHash<String, Integer>[] buckets = hash.getBuckets(i);
                 if (buckets.length > 0) {
-                    NodoHash<String, Integer> currentNode = buckets[0].getFirst();
-                    while (currentNode != null) {
-                        nodoList.add(currentNode);
-                        currentNode = currentNode.getNext();
+                    NodoHash<String, Integer> nodoActual = buckets[0].getFirst();
+                    while (nodoActual != null) {
+                        nodoList.add(nodoActual);
+                        nodoActual = nodoActual.getNext();
                     }
                 }
             } catch (Exception e) {
