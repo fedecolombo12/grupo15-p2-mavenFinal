@@ -5,8 +5,6 @@ public class NodoLista<T>{
 
     private NodoLista<T> siguiente;
 
-    private int priority;
-
     public NodoLista(T value) {
         this.value = value;
         this.siguiente = null;
@@ -28,11 +26,4 @@ public class NodoLista<T>{
         this.siguiente = next;
     }
 
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
 }

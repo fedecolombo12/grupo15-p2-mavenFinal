@@ -5,14 +5,17 @@ import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 import java.util.Objects;
 
+/* Se crea la entidad User la cual tiene un ID único, el nombre de la persona que twitteo, si el usuario es verificado,
+la cantidad de favoritos que tiene la cuenta y ademas una ListaEnlazada de Tweets ya que el usuario pude haber twitteado mas de
+una vez. Como las demas entidades, se crea el constructor, getters y setters, y metodo equals.
+ */
 public class User implements Comparable<User> {
-    private long idUser = 0;
+    private static long userIdCounter = 0;
+    private long idUser;
     private String name;
     boolean isVerified;
     int userFavourites;
     private ListaEnlazada<Tweet> listaTweet;
-
-    private int countTweets;
 
     public User(long idUser, String name, boolean isVerified, int userFavourites) {
         this.idUser = idUser;
@@ -23,7 +26,7 @@ public class User implements Comparable<User> {
     }
 
     public User() {
-        this.idUser = ++idUser;;
+        this.idUser = ++userIdCounter;;
         this.listaTweet = new ListaEnlazada<>();
     }
 
@@ -62,14 +65,6 @@ public class User implements Comparable<User> {
     public int getUserFavourites() {return userFavourites;}
 
     public void setUserFavourites(int userFavourites) {this.userFavourites = userFavourites;}
-
-    public void setCountTweets(int countTweets){
-        this.countTweets = countTweets;
-    }
-
-    public int getCountTweets(){
-        return countTweets;
-    }
 
     @Override
     public boolean equals(Object o) {

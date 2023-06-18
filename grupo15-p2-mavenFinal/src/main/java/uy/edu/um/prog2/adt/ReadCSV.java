@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 import java.time.LocalDate;
 import java.io.Reader;
@@ -35,63 +36,79 @@ public class ReadCSV {
         return tweetList;
     }
 
-
     public void getCsvInfo() throws FileNotValidException {
-        final String csvFile = "grupo15-p2-mavenFinal/src/main/resources/f1_dataset_test.csv";
+        final String csvFile = "grupo15-p2-mavenFinal/src/main/resources/datasetSanti.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
             CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             csvParser.iterator().next();  // Salta la primera fila que contiene los nombres de las columnas
-            long userIdCounter = 0;
-            long hashtagIdCounter = 0;
             for (CSVRecord csvRecord : csvParser) {
                 String[] values = csvRecord.values();
-                String username = values[1];
-                User user = buscarUsuario(username, userList);
-                if (user == null) {// El usuario no existe en la lista, crea uno nuevo y establece sus atributos
-                    user = new User();
-                    user.setIdUser(userIdCounter++);
-                    user.setName(username);
+                try {
+                    Tweet tweet = new Tweet();
+                    tweet.setIdTweet(Long.parseLong(values[0]));
+                    tweet.setContentTweet(values[10].toLowerCase());
+                    tweet.setSourceTweet(values[12]);
+                    tweet.setRetweet(Boolean.parseBoolean(values[13]));
+                    String dateFormat = values[9];
+                    tweet.setDate(timeOk(dateFormat));
+                    tweetList.add(tweet);
+                    User user = new User();
+                    user.setName(values[1]);
                     user.setVerified(Boolean.parseBoolean(values[8]));
                     user.setUserFavourites((int) Double.parseDouble(values[7]));
-                    userList.add(user); // Agrega el usuario a la lista
-                }
-                Tweet tweet = new Tweet();
-                long tweetId = Long.parseLong(values[0]);
-                tweet.setIdTweet(tweetId);
-                tweet.setContentTweet(values[10].toLowerCase());
-                tweet.setSourceTweet(values[12]);
-                tweet.setRetweet(Boolean.parseBoolean(values[13]));
-                String dateFormat = values[9];
-                LocalDateTime dateTime = LocalDateTime.parse(dateFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                String dateString = dateTime.format(DateTimeFormatter.ofPattern("YYYY-MM-DD"));
-                tweet.setDate(dateString);
-                String hashtagsColumn = values[11];
-                if (!hashtagsColumn.isEmpty()) {
-                    String[] hashtags = hashtagsColumn.replace("[", "").replace("]", "").replace("'", "").split(", ");
-                    for (String hashtagText : hashtags) {
-                        String trimmedHashtagText = hashtagText.trim();
-                        // Verifica si el hashtag ya existe en la lista
-                        HashTag existingHashtag = buscarHashtagPorTexto(trimmedHashtagText, hashtagList);
-                        if (existingHashtag != null) {
-                            tweet.getHashTagTweet().add(existingHashtag);
-                        } else { // El hashtag no existe en la lista, crea uno nuevo y asigna un ID único
+                    if (userList.contains(user)) {
+                        User exist = userList.searchT(user).getValue();
+                        exist.getlistaTweet().add(tweet);
+                    } else {
+                        user.getlistaTweet().add(tweet);
+                        userList.add(user);
+                    }
+                    ListaEnlazada<HashTag> hashTagTweet = new ListaEnlazada<>();
+                    String hashtagsColumn = values[11];
+                    if (!hashtagsColumn.isEmpty()) {
+                        String[] hashtags = hashtagsColumn.replace("[", "").replace("]", "").replace("'", "").split(", ");
+                        for (String hashtagText : hashtags) {
                             HashTag hashtag = new HashTag();
-                            hashtag.setIdHashTag(hashtagIdCounter++);
+                            String trimmedHashtagText = hashtagText.trim();
                             hashtag.setTextHashTag(trimmedHashtagText);
-                            hashtagList.add(hashtag);  // Agrega el nuevo hashtag a la lista y al tweet
-                            tweet.getHashTagTweet().add(hashtag);
+                            hashTagTweet.add(hashtag);
                         }
                     }
-                }
-                user.getlistaTweet().add(tweet);
-                tweetList.add(tweet);
+                    tweet.setHashTagTweet(hashTagTweet);
+                } catch (Exception Ignored) {
+                    }
             }
         } catch (IOException e) {
             throw new FileNotValidException("FILE_ERROR_FORMAT", e);
         }
-        userList.imprimirLista();
     }
-    public static User buscarUsuario(String usuarioBuscado, ListaEnlazada<User> userList) {
+
+    public String timeOk(String date) {
+        String[] dateTimeParts = date.split(" "); // Dividir la cadena en fecha y hora
+        String datePart = dateTimeParts[0]; // Obtener la parte de la fecha
+
+        String[] dateComponents = datePart.split("-"); // Dividir la fecha en componentes (año, mes, día)
+        String year = dateComponents[0];
+        String month = dateComponents[1];
+        String day = dateComponents[2];
+
+        // Reorganizar los componentes de fecha para obtener el formato deseado (YYYY-MM-DD)
+        String formattedDate = year + "-" + month + "-" + day;
+
+        return formattedDate;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+    /*public static User buscarUsuario(String usuarioBuscado, ListaEnlazada<User> userList) {
         for (int i = 0; i < userList.size(); i++) {
             User usuarioActual = userList.get(i);
             if (usuarioActual != null && usuarioActual.equals(usuarioBuscado)) {
@@ -108,5 +125,4 @@ public class ReadCSV {
             }
         }
         return null;
-    }
-}
+    }*/

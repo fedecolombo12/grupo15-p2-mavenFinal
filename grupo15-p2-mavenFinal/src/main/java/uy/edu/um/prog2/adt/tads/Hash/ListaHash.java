@@ -1,5 +1,6 @@
 package uy.edu.um.prog2.adt.tads.Hash;
 import uy.edu.um.prog2.adt.tads.Lista.Lista;
+import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 
 public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     private NodoHash<K, V> first;
@@ -128,6 +129,11 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     @Override
     public void quickSort() {
 
+    }
+
+    @Override
+    public NodoLista<NodoHash<K, V>> searchT(NodoHash<K, V> value) {
+        return null;
     }
 
     public void print() {

@@ -4,6 +4,10 @@ import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 import java.util.Objects;
 
+/* Se crean la entidad Hashtag la cual tiene un ID único y el contenido del hashtag.
+    Además, se crea el contructor, getters y setters. Se implementa el metodo equals donde el valor a comparar
+    sera el ID del hashtag para mas adelante corroborar si se encuentra en "hashtagList".
+ */
 public class HashTag implements Comparable<HashTag> {
     private long idHashTag;
     private String textHashTag;

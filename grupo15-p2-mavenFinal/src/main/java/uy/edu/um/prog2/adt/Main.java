@@ -5,11 +5,14 @@ import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import uy.edu.um.prog2.adt.exceptions.*;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 import uy.edu.um.prog2.adt.tads.Hash.*;
 
+/*Se crea el metodo desplegable en el cual se va a elegir entre opciones del 0 al 6 para poder realizar las consultas. Ademas,
+se separa con --- cuando comienza y termina cada funcion*/
 public class Main {
     private static ReadCSV readCSVImpl;
     static void menu() throws WrongDate {
@@ -24,11 +27,11 @@ public class Main {
         System.out.println("    6. Cantidad de tweets con una palabra o frase específicos");
         int option = scanner.nextInt();
         if (option == 1) {
-            date_function_1();
+            mostTenActivePilotsInTweets();
         } else if (option == 2) {
             topFifteenUsers();
         } else if(option == 3) {
-            date_function_3();
+            numberOfDifferentHashTagOnADay();
         } else if (option == 4) {
             mostUsedHashTag();
         } else if (option == 5) {
@@ -45,27 +48,19 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 1 ------------------------------------------------------
-    static void date_function_1() throws WrongDate {
-        System.out.println("Ingrese año en formato YYYY");
-        Scanner scanYear = new Scanner(System.in);
-        int optionYear = scanYear.nextInt();
-        if (optionYear == 2021 || optionYear == 2022){
-            System.out.println("Ingrese mes en formato MM");
-            Scanner scanMonth = new Scanner(System.in);
-            int optionMonth = scanMonth.nextInt();
-            scanMonth.close();
-            scanYear.close();
-            if ((optionYear == 2021 && optionMonth >= 07 && optionMonth <= 12) || (optionYear == 2022 && optionMonth >= 01 && optionMonth <= 8)){
-                mostTenActivePilotsInTweets();
-            } else {
-                throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
-            }
-        } else {
-            throw new WrongDate("Ingrese un año dentro del rango");
-        }
-    }
-    private static void mostTenActivePilotsInTweets() {
 
+    /* Lo primero que se hace es solicitar a la persona que ejecuta el programa que ingrese al año y mes en el cual
+    se quiere que se ejecute la funcion. Se sobreentiende por la letra del problema que no se va a colocar otra fecha
+    para que se "rompa" el programa.
+    */
+    private static void mostTenActivePilotsInTweets() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese año en formato YYYY");
+        int optionYear = scanner.nextInt();
+        System.out.println("Ingrese mes en formato MM");
+        int optionMonth = scanner.nextInt();
+        scanner.close();
+        String totalDate = optionYear + "-" + optionMonth;
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
@@ -123,50 +118,33 @@ public class Main {
 
 
     // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
-    static void date_function_3() throws WrongDate {
+
+    /* Se solicita a la persona que ejecuta el programa, el año (2021 o 2022), mes y dia en el cual queremos analizar la
+    cantidad de Hashtags diferentes en un dia.*/
+    static void numberOfDifferentHashTagOnADay() {
         System.out.println("Ingrese año en formato YYYY");
-        Scanner scanYear = new Scanner(System.in);
-        int optionYear = scanYear.nextInt();
-        if (optionYear == 2021 || optionYear == 2022){
-            System.out.println("Ingrese mes en formato MM");
-            Scanner scanMonth = new Scanner(System.in);
-            int optionMonth = scanMonth.nextInt();
-            scanMonth.close();
-            scanYear.close();
-            if ((optionYear == 2021 && optionMonth >= 07 && optionMonth <= 12) || (optionYear == 2022 && optionMonth >= 01 && optionMonth <= 8)){
-                System.out.println("Ingrese dia en formato DD");
-                Scanner scanDay = new Scanner(System.in);
-                int optionDay = scanDay.nextInt();
-                scanDay.close();
-                if (optionDay >= 01 && optionDay <= 31) {
-                    String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
-                    numberOfDifferentHashTagOnADay(totalDate);
-                } else {
-                    throw new WrongDate("Ingresar una fecha dentro del rango 2021-07-01 y 2022-08-31");
-                }
-            } else {
-                throw new WrongDate("Ingresar una fecha dentro del rango 2021-07 y 2022-08");
-            }
-        } else {
-            throw new WrongDate("Ingrese un año dentro del rango");
-        }
-    }
-    static void numberOfDifferentHashTagOnADay(String date) {
-        ListaEnlazada<Long> difHashTag = new ListaEnlazada<>();
+        Scanner scanner = new Scanner(System.in);
+        int optionYear = scanner.nextInt();
+        System.out.println("Ingrese mes en formato MM");
+        int optionMonth = scanner.nextInt();
+        System.out.println("Ingrese dia en formato DD");
+        int optionDay = scanner.nextInt();
+        scanner.close();
+        String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
+        ListaEnlazada<String> difHashTag = new ListaEnlazada<>();
         int numberOfDifferentHashTag = 0;
-        for (int i = 0; i < readCSVImpl.getTweetList().size(); i++) {
-            if (readCSVImpl.getTweetList().get(i).getDate().equals(date)) {
-                for (int j = 0; j < readCSVImpl.getTweetList().get(i).getHashTagTweet().size() ; j++) {
-                    long hashTagInList = readCSVImpl.getTweetList().get(i).getHashTagTweet().get(i).getIdHashTag();
-                    if (!difHashTag.contains(hashTagInList)){
+        for (int i = 1; i <= readCSVImpl.getTweetList().size(); i++) {
+            if (readCSVImpl.getTweetList().get(i).getDate().equals(totalDate)) {
+                for (int j = 1; j <= readCSVImpl.getTweetList().get(i).getHashTagTweet().size() ; j++) {
+                    String hashTagInList = readCSVImpl.getTweetList().get(i).getHashTagTweet().get(j).getTextHashTag().toLowerCase();
+                    if (!(difHashTag.contains((hashTagInList)))){
                         difHashTag.add(hashTagInList);
                         numberOfDifferentHashTag++;
                     }
                 }
             }
         }
-        System.out.println("La cantidad de hashtags distintos para el dia " + date + " son " + numberOfDifferentHashTag);
-
+        System.out.println("La cantidad de hashtags distintos para el dia " + totalDate + " son " + numberOfDifferentHashTag);
     }
 
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
@@ -177,7 +155,7 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
 
-    static ListaEnlazada<String> topSevenUsersWithFav() {
+    static void topSevenUsersWithFav() {
         ListaEnlazada<String> topSeven = new ListaEnlazada<>();
         readCSVImpl.getUserList().quickSort();
         NodoLista<User> nodo = readCSVImpl.getUserList().getPrimero();
@@ -189,7 +167,7 @@ public class Main {
             nodo = nodo.getSiguiente();
             count++;
         }
-        return topSeven;
+        topSeven.imprimirLista();
     }
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
@@ -199,7 +177,7 @@ public class Main {
         String optionWord = scanWord.nextLine();
         scanWord.close();
         int counterTweets = 0;
-        for (int i = 0; i < readCSVImpl.getTweetList().size() ; i++) {
+        for (int i = 1; i <= readCSVImpl.getTweetList().size() ; i++) {
             if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
                 counterTweets++;
             }
@@ -223,7 +201,7 @@ public class Main {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
         readCSVImpl = new ReadCSV();
         getDriversFromFile(driversLinkedList);
-        readCSVImpl.getCsvInfo(); //Probalo asi y anda, si le sacas las //, no larga el menu y tampoco ejecuta el getcsvinfo
+        readCSVImpl.getCsvInfo();
         menu();
     }
 }
