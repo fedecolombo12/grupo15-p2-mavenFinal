@@ -1,6 +1,8 @@
 package uy.edu.um.prog2.adt;
 import uy.edu.um.prog2.adt.entities.*;
 import uy.edu.um.prog2.adt.tads.Hash.MyHash;
+import uy.edu.um.prog2.adt.tads.Heap.MyHeap;
+import uy.edu.um.prog2.adt.tads.Heap.MyHeapImpl;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -54,13 +56,71 @@ public class Main {
     para que se "rompa" el programa.
     */
     private static void mostTenActivePilotsInTweets() {
+        TablaHash<String,Integer> hash = new TablaHash<>(50);
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese año en formato YYYY");
         int optionYear = scanner.nextInt();
         System.out.println("Ingrese mes en formato MM");
         int optionMonth = scanner.nextInt();
         scanner.close();
-        String totalDate = optionYear + "-" + optionMonth;
+
+        ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
+        getDriversFromFile(driversListaEnlazada);
+
+        NodoLista<Tweet> tweet = readCSVImpl.getTweetList().getPrimero();
+
+        while (tweet != null){
+            NodoLista<String> driver = driversListaEnlazada.getPrimero();
+            String dateTweet = tweet.getValue().getDate();
+            String[] dateTweetArray = dateTweet.split("-");
+            int year = Integer.parseInt(dateTweetArray[0]);
+            int month = Integer.parseInt(dateTweetArray[1]);
+            if (optionYear == year && optionMonth == month ){
+                while (driver != null){
+                String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
+                String driverName = driver.getValue().toLowerCase();
+
+                if (!hash.contains(driver.getValue().toLowerCase())){
+                    hash.put(driver.getValue().toLowerCase(),0);
+                }
+                if ((contentTweet.toLowerCase().contains(driverName))){
+                    int count = hash.get(driver.getValue().toLowerCase());
+                    hash.put(driver.getValue().toLowerCase(), count + 1);
+                }
+                driver = driver.getSiguiente();
+            }
+        }
+            tweet = tweet.getSiguiente();
+        }
+        ListaEnlazada<NodoHash<String, Integer>> nodoList = new ListaEnlazada<>();
+        for (int i = 0; i < hash.size(); i++) {
+            try {
+                ListaHash<String, Integer>[] buckets = hash.getBuckets(i);
+                if (buckets.length > 0) {
+                    NodoHash<String, Integer> currentNode = buckets[0].getFirst();
+                    while (currentNode != null) {
+                        nodoList.add(currentNode);
+                        currentNode = currentNode.getNext();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        MyHeapImpl<Integer,NodoHash<String, Integer>> driversHeap = new MyHeapImpl(nodoList.size());
+        NodoLista<NodoHash<String,Integer>> nodo = nodoList.getPrimero();
+        while (nodo != null){
+            driversHeap.insert(nodo.getValue().getData(), nodo.getValue());
+            nodo = nodo.getSiguiente();
+        }
+        NodoHash<String, Integer>[] topTen = new NodoHash[10];
+        for (int i = 0; i < 10; i++) {
+            NodoHash<String, Integer> nuevoNodo = driversHeap.extractMax();
+            if (nuevoNodo != null){
+                topTen[i] = nuevoNodo;
+                System.out.println(nuevoNodo.getKey() + " con " + nuevoNodo.getData() + " ocurrencias.");
+            }
+        }
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------

@@ -55,7 +55,6 @@ public class TablaHash<K, V> implements MyHash<K, V> {
     }
 
 
-
     public void printHash() {
         for (int i = 0; i < size; i++) {
             System.out.print("Bucket " + i + ": ");
