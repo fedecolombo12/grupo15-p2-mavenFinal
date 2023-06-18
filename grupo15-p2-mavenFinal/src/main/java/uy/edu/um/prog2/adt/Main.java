@@ -223,7 +223,7 @@ public class Main {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
         readCSVImpl = new ReadCSV();
         getDriversFromFile(driversLinkedList);
-        //readCSVImpl.getCsvInfo(); Probalo asi y anda, si le sacas las //, no larga el menu y tampoco ejecuta el getcsvinfo
+        readCSVImpl.getCsvInfo(); //Probalo asi y anda, si le sacas las //, no larga el menu y tampoco ejecuta el getcsvinfo
         menu();
     }
 }
