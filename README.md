@@ -1,10 +1,15 @@
-# grupo15-p2-mavenFinal
- 
-Método 1:
-Lista de 10 pilotos activos en la temporada 2023 más mencionados en los tweets en un mes
+<h1 align="center"> Grupo 15 - P2 - Maven Final </h1>
 
-- El usuario ingresa un año y mes en formato YYYY, MM
-- Se analizan los tweets para corroborar las menciones de los pilotos activos durante el mes y año ingresados
-- Se utiliza una TablaHash para realizar el conteo de las menciones de cada piloto.
-- Se muestra la lista, junto a la cantidad de menciones.
-- 
+## Índice
+
+* [Descripción]
+* [Estructura]
+* [Uso]
+
+
+### Descripción 
+
+#### Estructura
+Describe la estructura de directorios y archivos principales del proyecto. 
+Explica brevemente el propósito de cada componente importante.
+
