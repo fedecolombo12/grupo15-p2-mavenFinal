@@ -215,11 +215,6 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
         System.out.println();
     }
     @Override
-    public void quickSort() {
-        primero = quickSortRecursivo(getPrimero(), getUltimo());
-    }
-
-    @Override
     public NodoLista<T> searchT(T value) {
         NodoLista<T> aux = getPrimero();
         while (aux != null) {
@@ -230,47 +225,4 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
         }
         return null; // El valor no se encontró en la lista
     }
-
-    public NodoLista<T> quickSortRecursivo(NodoLista<T> inicio, NodoLista<T> fin) {
-        if (inicio == null || inicio == fin) {
-            return inicio;
-        }
-        NodoLista<T> pivote = partition(inicio, fin);
-        NodoLista<T> prev = null;
-        NodoLista<T> aux = inicio;
-        while (aux != pivote) {
-            prev = aux;
-            aux = aux.getSiguiente();
-        }
-        if (prev != null) {
-            prev.setSiguiente(null);
-            inicio = quickSortRecursivo(inicio, prev);
-            prev.setSiguiente(pivote);
-        } else {
-            inicio = quickSortRecursivo(inicio, pivote);
-            primero = pivote;
-        }
-        pivote.setSiguiente(quickSortRecursivo(pivote.getSiguiente(), fin));
-        return inicio;
-    }
-    public NodoLista<T> partition(NodoLista<T> inicio, NodoLista<T> fin) {
-        T pivotValue = fin.getValue();
-        NodoLista<T> i = inicio;
-        NodoLista<T> j = inicio;
-        while (j != fin) {
-            if (j.getValue().compareTo(pivotValue) < 0) {
-                T temp = i.getValue();
-                i.setValue(j.getValue());
-                j.setValue(temp);
-                i = i.getSiguiente();
-            }
-            j = j.getSiguiente();
-        }
-        T temp = i.getValue();
-        i.setValue(fin.getValue());
-        fin.setValue(temp);
-        return i;
-    }
-
-
 }

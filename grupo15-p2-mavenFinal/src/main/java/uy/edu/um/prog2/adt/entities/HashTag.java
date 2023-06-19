@@ -1,6 +1,4 @@
 package uy.edu.um.prog2.adt.entities;
-import uy.edu.um.prog2.adt.tads.Lista.*;
-import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 import java.util.Objects;
 

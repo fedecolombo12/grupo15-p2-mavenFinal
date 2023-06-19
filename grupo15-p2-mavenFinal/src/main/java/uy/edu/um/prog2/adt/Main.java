@@ -3,6 +3,7 @@ import uy.edu.um.prog2.adt.entities.*;
 import uy.edu.um.prog2.adt.tads.Hash.MyHash;
 import uy.edu.um.prog2.adt.tads.Heap.MyHeap;
 import uy.edu.um.prog2.adt.tads.Heap.MyHeapImpl;
+import uy.edu.um.prog2.adt.tads.Heap.NodoHeap;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -121,6 +122,15 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
     static void topFifteenUsers(Scanner scanner) {
+        MyHeapImpl<Integer, User> ranking = new MyHeapImpl<>(readCSVImpl.getUserList().size());
+        for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
+            ranking.insert(readCSVImpl.getUserList().get(i).getlistaTweet().size(), readCSVImpl.getUserList().get(i));
+        }
+        for (int c = 1; c <= 15; c++) {
+            User user = ranking.extractMax();
+            System.out.println("Nº " + c + " Cantidad de tweets: " + user.getlistaTweet().size() +
+                    "  Verificado: " + user.isVerified() + " Usuario: " + user.getName());
+        }
     }
 
     /* REVISAR
@@ -203,7 +213,6 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
-
     static void mostUsedHashTag(Scanner scanner) {
         TablaHash<String,Integer> hashHashtag = new TablaHash<>(50);
         System.out.println("Ingrese año en formato YYYY");
