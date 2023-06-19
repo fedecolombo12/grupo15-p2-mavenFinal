@@ -32,12 +32,12 @@ public class Main {
             System.out.println("    0. Para salir del programa");
             option = scanner.nextInt();
             switch (option) {
-                case 1 -> mostTenActivePilotsInTweets();
-                case 2 -> topFifteenUsers();
-                case 3 -> numberOfDifferentHashTagOnADay();
-                case 4 -> mostUsedHashTag();
-                case 5 -> topSevenUsersWithFav();
-                case 6 -> numberOfTweetsWithASpecificWord();
+                case 1 -> mostTenActivePilotsInTweets(scanner);
+                case 2 -> topFifteenUsers(scanner);
+                case 3 -> numberOfDifferentHashTagOnADay(scanner);
+                case 4 -> mostUsedHashTag(scanner);
+                case 5 -> topSevenUsersWithFav(scanner);
+                case 6 -> numberOfTweetsWithASpecificWord(scanner);
                 case 0 -> System.out.println("El programa finalizó. Muchas gracias.");
                 default -> System.out.println("Elige un número del 0 al 6");
             }
@@ -51,14 +51,14 @@ public class Main {
     se quiere que se ejecute la funcion. Se sobreentiende por la letra del problema que no se va a colocar otra fecha
     para que se "rompa" el programa.
     */
-    private static void mostTenActivePilotsInTweets() {
+    private static void mostTenActivePilotsInTweets(Scanner scanner) {
         TablaHash<String,Integer> hash = new TablaHash<>(50);
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese año en formato YYYY");
+        scanner.nextLine();
         int optionYear = scanner.nextInt();
+        scanner.nextLine();
         System.out.println("Ingrese mes en formato MM");
         int optionMonth = scanner.nextInt();
-        scanner.close();
 
         ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
         getDriversFromFile(driversListaEnlazada);
@@ -120,7 +120,7 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
-    static void topFifteenUsers() {
+    static void topFifteenUsers(Scanner scanner) {
     }
 
     /* REVISAR
@@ -177,15 +177,14 @@ public class Main {
 
     /* Se solicita a la persona que ejecuta el programa, el año (2021 o 2022), mes y dia en el cual queremos analizar la
     cantidad de Hashtags diferentes en un dia.*/
-    static void numberOfDifferentHashTagOnADay() {
+    static void numberOfDifferentHashTagOnADay(Scanner scanner) {
         System.out.println("Ingrese año en formato YYYY");
-        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
         int optionYear = scanner.nextInt();
         System.out.println("Ingrese mes en formato MM");
         int optionMonth = scanner.nextInt();
         System.out.println("Ingrese dia en formato DD");
         int optionDay = scanner.nextInt();
-        scanner.close();
         String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
         ListaEnlazada<String> difHashTag = new ListaEnlazada<>();
         int numberOfDifferentHashTag = 0;
@@ -205,16 +204,17 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
 
-    static void mostUsedHashTag() {
+    static void mostUsedHashTag(Scanner scanner) {
         TablaHash<String,Integer> hashHashtag = new TablaHash<>(50);
         System.out.println("Ingrese año en formato YYYY");
-        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
         int optionYear = scanner.nextInt();
         System.out.println("Ingrese mes en formato MM");
+        scanner.nextLine();
         int optionMonth = scanner.nextInt();
         System.out.println("Ingrese dia en formato DD");
+        scanner.nextLine();
         int optionDay = scanner.nextInt();
-        scanner.close();
         String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
         String maxHashtag = null;
         int maxCount = 0;
@@ -255,7 +255,7 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
 
-    static void topSevenUsersWithFav() {
+    static void topSevenUsersWithFav(Scanner scanner) {
         MyHeapImpl<Integer, User> heapUsers = new MyHeapImpl<>(readCSVImpl.getUserList().size());
         for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
             heapUsers.insert(readCSVImpl.getUserList().get(i).getUserFavourites(),readCSVImpl.getUserList().get(i));
@@ -274,11 +274,10 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
-    static void numberOfTweetsWithASpecificWord() throws WrongDate {
+    static void numberOfTweetsWithASpecificWord(Scanner scanner) throws WrongDate {
         System.out.println("Ingrese la palabra");
-        Scanner scanWord = new Scanner(System.in);
-        String optionWord = scanWord.nextLine();
-        scanWord.close();
+        scanner.nextLine();
+        String optionWord = scanner.nextLine();
         int counterTweets = 0;
         for (int i = 1; i <= readCSVImpl.getTweetList().size() ; i++) {
             if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
