@@ -39,11 +39,11 @@ public class MyHeapImpl<K extends Comparable<K>, T> implements MyHeap<K, T> {
 
     private void intercambiar(int menorInt, int mayorInt) {
         // Se crean variables temporales donde guardar nodos
-        NodoHeap<K, T> mayorNode = nodoHeaps[mayorInt];
-        NodoHeap<K, T> menorNode = nodoHeaps[menorInt];
+        NodoHeap<K, T> mayorNode = nodoHeaps[menorInt];
+        NodoHeap<K, T> menorNode = nodoHeaps[mayorInt];
 
-        nodoHeaps[menorInt] = mayorNode; // El mayor nodo se coloca en la p
-        nodoHeaps[mayorInt] = menorNode;
+        nodoHeaps[menorInt] = menorNode; // El mayor nodo se coloca en la p
+        nodoHeaps[mayorInt] = mayorNode;
     }
 
     @Override

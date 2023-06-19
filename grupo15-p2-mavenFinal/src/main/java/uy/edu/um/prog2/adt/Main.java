@@ -210,24 +210,71 @@ public class Main {
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
 
     static void mostUsedHashTag() {
-
+        TablaHash<String,Integer> hashHashtag = new TablaHash<>(50);
+        System.out.println("Ingrese año en formato YYYY");
+        Scanner scanner = new Scanner(System.in);
+        int optionYear = scanner.nextInt();
+        System.out.println("Ingrese mes en formato MM");
+        int optionMonth = scanner.nextInt();
+        System.out.println("Ingrese dia en formato DD");
+        int optionDay = scanner.nextInt();
+        scanner.close();
+        String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
+        String maxHashtag = null;
+        int maxCount = 0;
+        NodoLista<Tweet> aux = readCSVImpl.getTweetList().getPrimero();
+        while (aux != null) {
+            if(aux.getValue().getDate().equals(totalDate)) {
+                NodoLista<HashTag> auxHashtag = aux.getValue().getHashTagTweet().getPrimero();
+                while (auxHashtag != null) {
+                    String hashtagText = auxHashtag.getValue().getTextHashTag();
+                    if (!notF1(hashtagText)) {
+                        if (!hashHashtag.contains(hashtagText)) {
+                            hashHashtag.put(hashtagText, 1);
+                        } else {
+                            int newCount = hashHashtag.get(hashtagText) + 1;
+                            hashHashtag.put(hashtagText, newCount);
+                            if (newCount > maxCount) {
+                                maxHashtag = hashtagText;
+                                maxCount = newCount;
+                            }
+                        }
+                    }
+                    auxHashtag = auxHashtag.getSiguiente();
+                }
+            }
+            aux = aux.getSiguiente();
+        }
+        if (maxHashtag != null) {
+            System.out.println("El hashtag más utilizado es: " + maxHashtag + " y aparece " + maxCount + " veces");
+        }
     }
+    private static boolean notF1(String word) {
+        String not = "f1"; // Agrega aquí todas las palabras prohibidas
+        if (word.equalsIgnoreCase(not)) {
+            return true;
+        }
+        return false;
+}
 
     // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
 
     static void topSevenUsersWithFav() {
-        ListaEnlazada<String> topSeven = new ListaEnlazada<>();
-        readCSVImpl.getUserList().quickSort();
-        NodoLista<User> nodo = readCSVImpl.getUserList().getPrimero();
-        int count = 0;
-        while (nodo != null && count < 7) {
-            User user = nodo.getValue(); // Obtener el usuario y la cantidad de favoritos
-            String cuenta = user.getName() + " - Favoritos: " + user.getUserFavourites();// Crear una cadena con el nombre del usuario y la cantidad de favoritos
-            topSeven.add(cuenta);
-            nodo = nodo.getSiguiente();
-            count++;
+        MyHeapImpl<Integer, User> heapUsers = new MyHeapImpl<>(readCSVImpl.getUserList().size());
+        for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
+            heapUsers.insert(readCSVImpl.getUserList().get(i).getUserFavourites(),readCSVImpl.getUserList().get(i));
         }
-        topSeven.imprimirLista();
+        User[] top7 = new User[7];
+        for (int i = 0; i < 7 ; i++){
+            top7[i] = heapUsers.extractMax();
+        }
+        System.out.println("Las 7 cuentas con más favoritos son: ");
+        System.out.println();
+        for (int i = 0; i < 7; i++) {
+            System.out.println("Nombre: " + top7[i].getName());
+            System.out.println("Favoritos: " + top7[i].getUserFavourites());
+            System.out.println();
+        }
     }
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
@@ -244,6 +291,7 @@ public class Main {
         }
         System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
     }
+
     // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
 
     public static void getDriversFromFile(ListaEnlazada<String> driversLinkedList) {
