@@ -69,7 +69,7 @@ public class ReadCSV {
                         String[] hashtags = hashtagsColumn.replace("[", "").replace("]", "").replace("'", "").split(", ");
                         for (String hashtagText : hashtags) {
                             HashTag hashtag = new HashTag();
-                            String trimmedHashtagText = hashtagText.trim();
+                            String trimmedHashtagText = hashtagText.trim().toLowerCase();
                             hashtag.setTextHashTag(trimmedHashtagText);
                             hashTagTweet.add(hashtag);
                         }

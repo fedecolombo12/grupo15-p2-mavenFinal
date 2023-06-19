@@ -16,6 +16,18 @@ public class TablaHash<K, V> implements MyHash<K, V> {
         }
     }
 
+    public ListaHash<K, V>[] getBuckets() {
+        return buckets;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public int hashCode(K key) {
         int hashCode = key.hashCode();
         return Math.abs(hashCode) % size;
