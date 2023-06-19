@@ -127,11 +127,6 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     }
 
     @Override
-    public void quickSort() {
-
-    }
-
-    @Override
     public NodoLista<NodoHash<K, V>> searchT(NodoHash<K, V> value) {
         return null;
     }

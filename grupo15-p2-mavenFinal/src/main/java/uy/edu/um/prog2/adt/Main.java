@@ -34,10 +34,10 @@ public class Main {
             option = scanner.nextInt();
             switch (option) {
                 case 1 -> mostTenActivePilotsInTweets(scanner);
-                case 2 -> topFifteenUsers(scanner);
+                case 2 -> topFifteenUsers();
                 case 3 -> numberOfDifferentHashTagOnADay(scanner);
                 case 4 -> mostUsedHashTag(scanner);
-                case 5 -> topSevenUsersWithFav(scanner);
+                case 5 -> topSevenUsersWithFav();
                 case 6 -> numberOfTweetsWithASpecificWord(scanner);
                 case 0 -> System.out.println("El programa finalizó. Muchas gracias.");
                 default -> System.out.println("Elige un número del 0 al 6");
@@ -60,7 +60,7 @@ public class Main {
         scanner.nextLine();
         System.out.println("Ingrese mes en formato MM");
         int optionMonth = scanner.nextInt();
-
+        long tempFunction1 = System.currentTimeMillis();
         ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
         getDriversFromFile(driversListaEnlazada);
 
@@ -118,10 +118,12 @@ public class Main {
                 System.out.println(nuevoNodo.getKey() + " con " + nuevoNodo.getData() + " ocurrencias.");
             }
         }
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction1)/1000) +" segundos.");
+        System.out.println();
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
-    static void topFifteenUsers(Scanner scanner) {
+    static void topFifteenUsers() {
         MyHeapImpl<Integer, User> ranking = new MyHeapImpl<>(readCSVImpl.getUserList().size());
         for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
             ranking.insert(readCSVImpl.getUserList().get(i).getlistaTweet().size(), readCSVImpl.getUserList().get(i));
@@ -196,6 +198,7 @@ public class Main {
         System.out.println("Ingrese dia en formato DD");
         int optionDay = scanner.nextInt();
         String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
+        long tempFunction3 = System.currentTimeMillis();
         ListaEnlazada<String> difHashTag = new ListaEnlazada<>();
         int numberOfDifferentHashTag = 0;
         for (int i = 1; i <= readCSVImpl.getTweetList().size(); i++) {
@@ -210,6 +213,8 @@ public class Main {
             }
         }
         System.out.println("La cantidad de hashtags distintos para el dia " + totalDate + " son " + numberOfDifferentHashTag);
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction3)/1000) +" segundos.");
+        System.out.println();
     }
 
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
@@ -225,6 +230,7 @@ public class Main {
         scanner.nextLine();
         int optionDay = scanner.nextInt();
         String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
+        long tempFunction4 = System.currentTimeMillis();
         String maxHashtag = null;
         int maxCount = 0;
         NodoLista<Tweet> aux = readCSVImpl.getTweetList().getPrimero();
@@ -253,6 +259,8 @@ public class Main {
         if (maxHashtag != null) {
             System.out.println("El hashtag más utilizado es: " + maxHashtag + " y aparece " + maxCount + " veces");
         }
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction4)/1000) +" segundos.");
+        System.out.println();
     }
     private static boolean notF1(String word) {
         String not = "f1"; // Agrega aquí todas las palabras prohibidas
@@ -264,7 +272,8 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
 
-    static void topSevenUsersWithFav(Scanner scanner) {
+    static void topSevenUsersWithFav() {
+        long tempFunction5 = System.currentTimeMillis();
         MyHeapImpl<Integer, User> heapUsers = new MyHeapImpl<>(readCSVImpl.getUserList().size());
         for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
             heapUsers.insert(readCSVImpl.getUserList().get(i).getUserFavourites(),readCSVImpl.getUserList().get(i));
@@ -280,6 +289,8 @@ public class Main {
             System.out.println("Favoritos: " + top7[i].getUserFavourites());
             System.out.println();
         }
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction5)/1000) +" segundos.");
+        System.out.println();
     }
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
@@ -288,12 +299,15 @@ public class Main {
         scanner.nextLine();
         String optionWord = scanner.nextLine();
         int counterTweets = 0;
+        long tempFunction6 = System.currentTimeMillis();
         for (int i = 1; i <= readCSVImpl.getTweetList().size() ; i++) {
             if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
                 counterTweets++;
             }
         }
         System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction6)/1000) +" segundos.");
+        System.out.println();
     }
 
     // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
@@ -311,9 +325,16 @@ public class Main {
     }
     public static void main(String[] args) throws FileNotValidException, IOException, WrongDate {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
-        readCSVImpl = new ReadCSV();
+        long tempDrivers = System.currentTimeMillis();
         getDriversFromFile(driversLinkedList);
+        System.out.println("Tiempo de carga de los drivers: " + (double) ((System.currentTimeMillis() - tempDrivers)/1000) +" segundos.");
+        System.out.println();
+        System.out.println("Cargando CSV...");
+        System.out.println();
+        readCSVImpl = new ReadCSV();
+        long tempCSV = System.currentTimeMillis();
         readCSVImpl.getCsvInfo();
+        System.out.println("Tiempo de carga del CSV: " + (double) ((System.currentTimeMillis() - tempCSV)/1000) +" segundos.");
         menu();
     }
 }
