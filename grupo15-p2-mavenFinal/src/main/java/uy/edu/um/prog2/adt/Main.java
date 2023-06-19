@@ -19,33 +19,29 @@ public class Main {
     private static ReadCSV readCSVImpl;
     static void menu() throws WrongDate {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Menu principal");
-        System.out.println("Seleccione la opción del menú: ");
-        System.out.println("    1. Listar los 10 pilotos activos en la temporada 2023 más mencionados en los tweets en un mes");
-        System.out.println("    2. Top 15 usuarios con más tweets");
-        System.out.println("    3. Cantidad de hashtags distintos para un día dado");
-        System.out.println("    4. Hashtag más usado para un día dado");
-        System.out.println("    5. Top 7 cuentas con más favoritos");
-        System.out.println("    6. Cantidad de tweets con una palabra o frase específicos");
-        int option = scanner.nextInt();
-        if (option == 1) {
-            mostTenActivePilotsInTweets();
-        } else if (option == 2) {
-            topFifteenUsers();
-        } else if(option == 3) {
-            numberOfDifferentHashTagOnADay();
-        } else if (option == 4) {
-            mostUsedHashTag();
-        } else if (option == 5) {
-            topSevenUsersWithFav();
-        } else if (option == 6) {
-            numberOfTweetsWithASpecificWord();
-        } else if (option == 0) {
-            System.out.println("El programa finalizo. Muchas gracias.");
-        } else {
-            System.out.println("Elige un numero del 0 al 6");
-            menu();
-        }
+        int option;
+        do {
+            System.out.println("Menu principal");
+            System.out.println("Seleccione la opción del menú: ");
+            System.out.println("    1. Listar los 10 pilotos activos en la temporada 2023 más mencionados en los tweets en un mes");
+            System.out.println("    2. Top 15 usuarios con más tweets");
+            System.out.println("    3. Cantidad de hashtags distintos para un día dado");
+            System.out.println("    4. Hashtag más usado para un día dado");
+            System.out.println("    5. Top 7 cuentas con más favoritos");
+            System.out.println("    6. Cantidad de tweets con una palabra o frase específicos");
+            System.out.println("    0. Para salir del programa");
+            option = scanner.nextInt();
+            switch (option) {
+                case 1 -> mostTenActivePilotsInTweets();
+                case 2 -> topFifteenUsers();
+                case 3 -> numberOfDifferentHashTagOnADay();
+                case 4 -> mostUsedHashTag();
+                case 5 -> topSevenUsersWithFav();
+                case 6 -> numberOfTweetsWithASpecificWord();
+                case 0 -> System.out.println("El programa finalizó. Muchas gracias.");
+                default -> System.out.println("Elige un número del 0 al 6");
+            }
+        } while (option != 0);
         scanner.close();
     }
 
@@ -278,7 +274,7 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
-    static void numberOfTweetsWithASpecificWord() {
+    static void numberOfTweetsWithASpecificWord() throws WrongDate {
         System.out.println("Ingrese la palabra");
         Scanner scanWord = new Scanner(System.in);
         String optionWord = scanWord.nextLine();
