@@ -13,6 +13,7 @@ import java.util.*;
 import uy.edu.um.prog2.adt.exceptions.*;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 import uy.edu.um.prog2.adt.tads.Hash.*;
+import uy.edu.um.prog2.adt.tads.MyBinarySearchTree.NodoBST;
 
 /*Se crea el metodo desplegable en el cual se va a elegir entre opciones del 0 al 6 para poder realizar las consultas. Ademas,
 se separa con --- cuando comienza y termina cada funcion*/
@@ -53,7 +54,7 @@ public class Main {
     para que se "rompa" el programa.
     */
     private static void mostTenActivePilotsInTweets(Scanner scanner) {
-        TablaHash<String,Integer> hash = new TablaHash<>(50);
+        TablaHash<String,Integer> hash = new TablaHash<>(10);
         System.out.println("Ingrese año en formato YYYY");
         scanner.nextLine();
         int optionYear = scanner.nextInt();
@@ -72,7 +73,7 @@ public class Main {
             String[] dateTweetA = dateTweet.split("-");
             int year = Integer.parseInt(dateTweetA[0]);
             int month = Integer.parseInt(dateTweetA[1]);
-            if (optionYear == year && optionMonth == month ){
+            if (optionYear == year && optionMonth == month){
                 while (driver != null){
                 String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
                 String driverName = driver.getValue().toLowerCase();
@@ -80,9 +81,9 @@ public class Main {
                 if (!hash.contains(driverName)){
                     hash.put(driverName,0);
                 }
-                if ((contentTweet.toLowerCase().contains(driverName))){
-                    int count = hash.get(driverName);
-                    hash.put(driverName, count + 1);
+                if (contentTweet.contains(driverName)){
+                    Integer occurrences = hash.get(driverName);
+                    hash.put(driverName, occurrences + 1);
                 }
                 driver = driver.getSiguiente();
             }
@@ -93,7 +94,7 @@ public class Main {
         for (int i = 0; i < hash.size(); i++) {
             try {
                 ListaHash<String, Integer>[] buckets = hash.getBuckets(i);
-                if (buckets.length > 0) {
+                if (buckets != null  && buckets.length > 0) {
                     NodoHash<String, Integer> nodoActual = buckets[0].getFirst();
                     while (nodoActual != null) {
                         nodoList.add(nodoActual);

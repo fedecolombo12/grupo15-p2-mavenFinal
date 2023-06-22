@@ -36,6 +36,6 @@ public class NodoHash<K, T> implements Comparable<NodoHash<K, T>> {
 
     @Override
     public int compareTo(NodoHash<K, T> o) {
-        return 0;
+        return this.data.toString().compareTo(o.getData().toString());
     }
 }
