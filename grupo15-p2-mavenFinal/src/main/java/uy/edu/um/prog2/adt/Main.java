@@ -1,19 +1,14 @@
 package uy.edu.um.prog2.adt;
 import uy.edu.um.prog2.adt.entities.*;
-import uy.edu.um.prog2.adt.tads.Hash.MyHash;
-import uy.edu.um.prog2.adt.tads.Heap.MyHeap;
 import uy.edu.um.prog2.adt.tads.Heap.MyHeapImpl;
-import uy.edu.um.prog2.adt.tads.Heap.NodoHeap;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 import uy.edu.um.prog2.adt.exceptions.*;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 import uy.edu.um.prog2.adt.tads.Hash.*;
-import uy.edu.um.prog2.adt.tads.MyBinarySearchTree.NodoBST;
 
 /*Se crea el metodo desplegable en el cual se va a elegir entre opciones del 0 al 6 para poder realizar las consultas. Ademas,
 se separa con --- cuando comienza y termina cada funcion*/
@@ -61,6 +56,10 @@ public class Main {
         scanner.nextLine();
         System.out.println("Ingrese mes en formato MM");
         int optionMonth = scanner.nextInt();
+        verify_date(optionYear,optionMonth);
+        if (!verify_date(optionYear, optionMonth)){
+            System.out.println("Fecha ingresada FUERA DE RANGO");
+        } else {
         long tempFunction1 = System.currentTimeMillis();
         ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
         getDriversFromFile(driversListaEnlazada);
@@ -121,6 +120,7 @@ public class Main {
         }
         System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction1)/1000) +" segundos.");
         System.out.println();
+        }
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
@@ -338,4 +338,20 @@ public class Main {
         System.out.println("Tiempo de carga del CSV: " + (double) ((System.currentTimeMillis() - tempCSV)/1000) +" segundos.");
         menu();
     }
+
+    // -------------------------------------------- CHEQUEO DE FECHA----------------------------------------------------
+
+    public static boolean verify_date(int year, int month) {
+        if (year == 2021){
+            if (month >= 7 && month <= 12){
+              return true;
+            }
+        } else if (year == 2022){
+            if (month >= 01 && month <= 8){
+               return true;}
+        }
+        return false;
+    }
+
+
 }
