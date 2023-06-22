@@ -12,5 +12,9 @@ public interface Lista<T extends Comparable<T>> {
     void addOrder(T value);
     void imprimirLista();
     NodoLista<T> searchT (T value);
+
+    NodoLista<T> getNode(int position);
+
+    void swap(int index1, int index2);
 }
 

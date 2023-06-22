@@ -8,5 +8,7 @@ public interface MyQueue<T> {
     void imprimirQueue();
     void enqueueRight(T element);
     T dequeueLeft () throws EmptyQueueException;
+    void enqueueWithPriority(T element, int prioridad);
+    int size();
 }
 

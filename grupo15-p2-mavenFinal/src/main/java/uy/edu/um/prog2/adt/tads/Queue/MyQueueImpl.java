@@ -1,5 +1,6 @@
 package uy.edu.um.prog2.adt.tads.Queue;
 import uy.edu.um.prog2.adt.exceptions.EmptyQueueException;
+import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 
 public class MyQueueImpl <T> implements MyQueue<T> {
     private NodoQueue<T> primero;
@@ -91,6 +92,48 @@ public class MyQueueImpl <T> implements MyQueue<T> {
             setPrimero(getPrimero().getSiguiente());
         }
         return item;
+    }
+
+    @Override
+    public void enqueueWithPriority(T element, int prioridad) {
+        NodoQueue<T> newNodo = new NodoQueue<>(element);
+
+        if (isEmpty() || prioridad > getPrimero().getPrioridad()) {
+            // Si la cola está vacía o la prioridad del nuevo elemento es mayor que la del primer elemento actual
+            newNodo.setSiguiente(getPrimero());
+            setPrimero(newNodo);
+            if (getUltimo() == null) {
+                setUltimo(newNodo);
+            }
+        } else {
+            NodoQueue<T> aux = getPrimero();
+
+            while (aux.getSiguiente() != null && aux.getSiguiente().getPrioridad() >= prioridad) {
+                aux = aux.getSiguiente();
+            }
+
+            newNodo.setSiguiente(aux.getSiguiente());
+            aux.setSiguiente(newNodo);
+
+            if (aux == getUltimo()) {
+                setUltimo(newNodo);
+            }
+        }
+    }
+
+    @Override
+    public int size() {
+        int size = 0;
+        if (getPrimero() == null) {
+            return size;
+        }
+        NodoQueue<T> aux = getPrimero();
+        size++;
+        while (aux.getSiguiente() != null) {
+            aux = aux.getSiguiente();
+            size++;
+        }
+        return size;
     }
 
 }

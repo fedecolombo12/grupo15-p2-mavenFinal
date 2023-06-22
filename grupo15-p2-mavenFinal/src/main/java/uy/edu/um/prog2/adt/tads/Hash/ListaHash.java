@@ -131,6 +131,16 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
         return null;
     }
 
+    @Override
+    public NodoLista<NodoHash<K, V>> getNode(int position) {
+        return null;
+    }
+
+    @Override
+    public void swap(int index1, int index2) {
+
+    }
+
     public void print() {
         NodoHash<K, V> current = first;
         for (int i = 0; i < this.size(); i++) {

@@ -5,16 +5,21 @@ import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import uy.edu.um.prog2.adt.exceptions.*;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 import uy.edu.um.prog2.adt.tads.Hash.*;
+import uy.edu.um.prog2.adt.tads.Queue.MyQueue;
+import uy.edu.um.prog2.adt.tads.Queue.MyQueueImpl;
 
 /*Se crea el metodo desplegable en el cual se va a elegir entre opciones del 0 al 6 para poder realizar las consultas. Ademas,
 se separa con --- cuando comienza y termina cada funcion*/
 public class Main {
     private static ReadCSV readCSVImpl;
-    static void menu() throws WrongDate {
+    static void menu() throws WrongDate, EmptyQueueException {
         Scanner scanner = new Scanner(System.in);
         int option;
         do {
@@ -56,135 +61,93 @@ public class Main {
         scanner.nextLine();
         System.out.println("Ingrese mes en formato MM");
         int optionMonth = scanner.nextInt();
-        verify_date(optionYear,optionMonth);
-        if (!verify_date(optionYear, optionMonth)){
-            System.out.println("Fecha ingresada FUERA DE RANGO");
-        } else {
-        long tempFunction1 = System.currentTimeMillis();
-        ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
-        getDriversFromFile(driversListaEnlazada);
+        String totalDate = optionYear + "-" + optionMonth;
+        if (verificarFechaEnRangoYM(totalDate)){
+            long tempFunction1 = System.currentTimeMillis();
+            ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
+            getDriversFromFile(driversListaEnlazada);
 
-        NodoLista<Tweet> tweet = readCSVImpl.getTweetList().getPrimero();
+            NodoLista<Tweet> tweet = readCSVImpl.getTweetList().getPrimero();
 
-        while (tweet != null){
-            NodoLista<String> driver = driversListaEnlazada.getPrimero();
-            String dateTweet = tweet.getValue().getDate();
-            String[] dateTweetA = dateTweet.split("-");
-            int year = Integer.parseInt(dateTweetA[0]);
-            int month = Integer.parseInt(dateTweetA[1]);
-            if (optionYear == year && optionMonth == month){
-                while (driver != null){
-                String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
-                String driverName = driver.getValue().toLowerCase();
+            while (tweet != null){
+                NodoLista<String> driver = driversListaEnlazada.getPrimero();
+                String dateTweet = tweet.getValue().getDate();
+                String[] dateTweetA = dateTweet.split("-");
+                int year = Integer.parseInt(dateTweetA[0]);
+                int month = Integer.parseInt(dateTweetA[1]);
+                if (optionYear == year && optionMonth == month){
+                    while (driver != null){
+                    String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
+                    String driverName = driver.getValue().toLowerCase();
 
-                if (!hash.contains(driverName)){
-                    hash.put(driverName,0);
-                }
-                if (contentTweet.contains(driverName)){
-                    Integer occurrences = hash.get(driverName);
-                    hash.put(driverName, occurrences + 1);
-                }
-                driver = driver.getSiguiente();
-            }
-        }
-            tweet = tweet.getSiguiente();
-        }
-        ListaEnlazada<NodoHash<String, Integer>> nodoList = new ListaEnlazada<>();
-        for (int i = 0; i < hash.size(); i++) {
-            try {
-                ListaHash<String, Integer>[] buckets = hash.getBuckets(i);
-                if (buckets != null  && buckets.length > 0) {
-                    NodoHash<String, Integer> nodoActual = buckets[0].getFirst();
-                    while (nodoActual != null) {
-                        nodoList.add(nodoActual);
-                        nodoActual = nodoActual.getNext();
+                    if (!hash.contains(driverName)){
+                        hash.put(driverName,0);
                     }
+                    if (contentTweet.contains(driverName)){
+                        Integer occurrences = hash.get(driverName);
+                        hash.put(driverName, occurrences + 1);
+                    }
+                    driver = driver.getSiguiente();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
-        MyHeapImpl<Integer,NodoHash<String, Integer>> driversHeap = new MyHeapImpl(nodoList.size());
-        NodoLista<NodoHash<String,Integer>> nodo = nodoList.getPrimero();
-        while (nodo != null){
-            driversHeap.insert(nodo.getValue().getData(), nodo.getValue());
-            nodo = nodo.getSiguiente();
-        }
-        NodoHash<String, Integer>[] topTen = new NodoHash[10];
-        for (int i = 0; i < 10; i++) {
-            NodoHash<String, Integer> nuevoNodo = driversHeap.extractMax();
-            if (nuevoNodo != null){
-                topTen[i] = nuevoNodo;
-                System.out.println(nuevoNodo.getKey() + " con " + nuevoNodo.getData() + " ocurrencias.");
+                tweet = tweet.getSiguiente();
             }
-        }
-        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction1)/1000) +" segundos.");
-        System.out.println();
+            ListaEnlazada<NodoHash<String, Integer>> nodoList = new ListaEnlazada<>();
+            for (int i = 0; i < hash.size(); i++) {
+                try {
+                    ListaHash<String, Integer>[] buckets = hash.getBuckets(i);
+                    if (buckets != null  && buckets.length > 0) {
+                        NodoHash<String, Integer> nodoActual = buckets[0].getFirst();
+                        while (nodoActual != null) {
+                            nodoList.add(nodoActual);
+                            nodoActual = nodoActual.getNext();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            MyHeapImpl<Integer,NodoHash<String, Integer>> driversHeap = new MyHeapImpl(nodoList.size());
+            NodoLista<NodoHash<String,Integer>> nodo = nodoList.getPrimero();
+            while (nodo != null){
+                driversHeap.insert(nodo.getValue().getData(), nodo.getValue());
+                nodo = nodo.getSiguiente();
+            }
+            NodoHash<String, Integer>[] topTen = new NodoHash[10];
+            for (int i = 0; i < 10; i++) {
+                NodoHash<String, Integer> nuevoNodo = driversHeap.extractMax();
+                if (nuevoNodo != null){
+                    topTen[i] = nuevoNodo;
+                    System.out.println(nuevoNodo.getKey() + " con " + nuevoNodo.getData() + " ocurrencias.");
+                }
+            }
+            System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction1)/1000) +" segundos.");
+            System.out.println();
         }
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
-    static void topFifteenUsers() {
-        MyHeapImpl<Integer, User> ranking = new MyHeapImpl<>(readCSVImpl.getUserList().size());
-        for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
-            ranking.insert(readCSVImpl.getUserList().get(i).getlistaTweet().size(), readCSVImpl.getUserList().get(i));
-        }
-        for (int c = 1; c <= 15; c++) {
-            User user = ranking.extractMax();
-            System.out.println("Nº " + c + " Cantidad de tweets: " + user.getlistaTweet().size() +
-                    "  Verificado: " + user.isVerified() + " Usuario: " + user.getName());
-        }
+    static void topFifteenUsers() throws EmptyQueueException {
+            /*// Create a priority queue based on the tweet list size
+            MyQueue<User> queue = new MyQueueImpl<>();
+
+            // Insert users into the priority queue based on their tweet list size
+            for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
+                User user = readCSVImpl.getUserList().get(i);
+                int tweetSize = user.getlistaTweet().size();
+                queue.enqueueWithPriority(user, tweetSize);
+            }
+
+            // Print the top 15 users with the most tweets
+            for (int i = 0; i < 15 && !queue.isEmpty(); i++) {
+                User user = queue.dequeue();
+                System.out.println("Nombre de Usuario: " + user.getName());
+                System.out.println("Tiene: " + user.getlistaTweet().size() + " tweets");
+                System.out.println("Verificación: " + user.isVerified());
+                System.out.println();
+            }*/
+
     }
-
-    /* REVISAR
-
-    public static void getTopFifteen(List<Tweet> listOfTweets){
-        // El tamaño de la tabla se puede cambiar
-        MyHash<String, User> usersHash = new TablaHash<>(50);
-
-        for (Tweet tweets : listOfTweets){
-            User userName = tweets.getUser();
-            String user = userName.getName();
-
-            // Chequeo si el usuario ya está en el Hash o no
-            if (!usersHash.contains(user)){
-                // lo agrego a la tabla
-                usersHash.put(user, userName);
-            }
-
-            User newUser = usersHash.get(user);
-            newUser.getCountTweets();
-            }
-
-        List<User> topUser = getTopUsers(usersHash,15);
-
-        for (User user: topUser){
-            System.out.println("Usuario: " + user + ", cantidad de tweets: " + user.getCountTweets());
-        }
-
-     */
-
-
-
-        /*
-        REVISAR
-        public static List<User> getTopUsers(MyHash<String,User> userMyHash, int n){
-        List<User> users = new ArrayList<>(userMyHash.size());
-
-            for (int i = 0; i < users.size() ; i++) {
-                ListaHash<String,User> bucket =
-
-            NodoHash<String, User> aux = bucket.getFirst();
-            while (aux != null){
-                users.add(aux.getData());
-                aux = aux.getNext();
-            }
-        }
-        Collections.sort(users, Comparator.comparingInt(User::getCountTweets).reversed());
-        return users.subList(0, Math.min(n, users.size()));
-        }
-    */
-
 
     // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
 
@@ -199,6 +162,7 @@ public class Main {
         System.out.println("Ingrese dia en formato DD");
         int optionDay = scanner.nextInt();
         String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
+        verificarFechaEnRango(totalDate);
         long tempFunction3 = System.currentTimeMillis();
         ListaEnlazada<String> difHashTag = new ListaEnlazada<>();
         int numberOfDifferentHashTag = 0;
@@ -231,6 +195,7 @@ public class Main {
         scanner.nextLine();
         int optionDay = scanner.nextInt();
         String totalDate = optionYear + "-" + optionMonth + "-" + optionDay;
+        verificarFechaEnRango(totalDate);
         long tempFunction4 = System.currentTimeMillis();
         String maxHashtag = null;
         int maxCount = 0;
@@ -324,7 +289,7 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) throws FileNotValidException, IOException, WrongDate {
+    public static void main(String[] args) throws FileNotValidException, IOException, WrongDate, EmptyQueueException {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
         long tempDrivers = System.currentTimeMillis();
         getDriversFromFile(driversLinkedList);
@@ -341,16 +306,28 @@ public class Main {
 
     // -------------------------------------------- CHEQUEO DE FECHA----------------------------------------------------
 
-    public static boolean verify_date(int year, int month) {
-        if (year == 2021){
-            if (month >= 7 && month <= 12){
-              return true;
-            }
-        } else if (year == 2022){
-            if (month >= 01 && month <= 8){
-               return true;}
-        }
-        return false;
+    public static boolean verificarFechaEnRango(String fechaStr) {
+        boolean variable = false;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate fecha = LocalDate.parse(fechaStr, formatter);
+
+        LocalDate fechaInicioRango = LocalDate.of(2021, 7, 1);
+        LocalDate fechaFinRango = LocalDate.of(2022, 8, 31);
+
+        return !fecha.isBefore(fechaInicioRango) && !fecha.isAfter(fechaFinRango);
+    }
+
+    public static boolean verificarFechaEnRangoYM(String fechaStr) {
+        boolean variable = false;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        YearMonth fecha = YearMonth.parse(fechaStr, formatter);
+
+        YearMonth fechaInicioRango = YearMonth.of(2021, 7);
+        YearMonth fechaFinRango = YearMonth.of(2022, 8);
+
+        return !fecha.isBefore(fechaInicioRango) && !fecha.isAfter(fechaFinRango);
     }
 
 
