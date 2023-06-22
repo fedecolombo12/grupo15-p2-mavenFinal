@@ -24,13 +24,9 @@ import java.nio.file.Files;
 
 public class ReadCSV {
     public ListaEnlazada<User> userList = new ListaEnlazada<>();
-    public ListaEnlazada<HashTag> hashtagList = new ListaEnlazada<>();
     public ListaEnlazada<Tweet> tweetList = new ListaEnlazada<>();
     public ListaEnlazada<User> getUserList() {
         return userList;
-    }
-    public ListaEnlazada<HashTag> getHashtagList() {
-        return hashtagList;
     }
     public ListaEnlazada<Tweet> getTweetList() {
         return tweetList;
@@ -51,18 +47,6 @@ public class ReadCSV {
                     tweet.setRetweet(Boolean.parseBoolean(values[13]));
                     String dateFormat = values[9];
                     tweet.setDate(timeOk(dateFormat));
-                    tweetList.add(tweet);
-                    User user = new User();
-                    user.setName(values[1]);
-                    user.setVerified(Boolean.parseBoolean(values[8]));
-                    user.setUserFavourites((int) Double.parseDouble(values[7]));
-                    if (userList.contains(user)) {
-                        User exist = userList.searchT(user).getValue();
-                        exist.getlistaTweet().add(tweet);
-                    } else {
-                        user.getlistaTweet().add(tweet);
-                        userList.add(user);
-                    }
                     ListaEnlazada<HashTag> hashTagTweet = new ListaEnlazada<>();
                     String hashtagsColumn = values[11];
                     if (!hashtagsColumn.isEmpty()) {
@@ -75,8 +59,19 @@ public class ReadCSV {
                         }
                     }
                     tweet.setHashTagTweet(hashTagTweet);
-                } catch (Exception Ignored) {
+                    tweetList.add(tweet);
+                    User user = new User();
+                    user.setName(values[1]);
+                    user.setVerified(Boolean.parseBoolean(values[8]));
+                    user.setUserFavourites((int) Double.parseDouble(values[7]));
+                    if (userList.contains(user)) {
+                        User exist = userList.searchT(user).getValue();
+                        exist.getlistaTweet().add(tweet);
+                    } else {
+                        user.getlistaTweet().add(tweet);
+                        userList.add(user);
                     }
+                } catch (Exception Ignored) {}
             }
         } catch (IOException e) {
             throw new FileNotValidException("FILE_ERROR_FORMAT", e);

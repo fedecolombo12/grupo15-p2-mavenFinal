@@ -261,20 +261,24 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
     static void numberOfTweetsWithASpecificWord(Scanner scanner) throws WrongDate {
-        System.out.println("Ingrese la palabra");
-        scanner.nextLine();
-        String optionWord = scanner.nextLine();
-        int counterTweets = 0;
-        long tempFunction6 = System.currentTimeMillis();
-        for (int i = 1; i <= readCSVImpl.getTweetList().size() ; i++) {
-            if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
-                counterTweets++;
+            System.out.println("Ingrese la palabra");
+            scanner.nextLine();
+            String optionWord = scanner.nextLine();
+            int counterTweets = 0;
+            long tempFunction6 = System.currentTimeMillis();
+
+            int i = 1;
+            while (i <= readCSVImpl.getTweetList().size()) {
+                if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
+                    counterTweets++;
+                }
+                i++;
             }
+
+            System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
+            System.out.println("Tiempo de carga de esta función es: " + (double) ((System.currentTimeMillis() - tempFunction6)/1000) + " segundos.");
+            System.out.println();
         }
-        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
-        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction6)/1000) +" segundos.");
-        System.out.println();
-    }
 
     // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
 
