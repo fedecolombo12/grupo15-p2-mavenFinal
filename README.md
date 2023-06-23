@@ -10,7 +10,7 @@
 * [Actualización de UML](#actualizacion-uml)
 * [Procesos de Carga](#descripción)
 * [Estructura](#estructura)
-* [Memoria](#memoria)
+* [Memoria y tiempos de ejecución](#memoria-y-tiempo-de-ejecución)
 
 
 ## <p><span style="color: skyblue;"> Actualización UML </span></p>
@@ -154,7 +154,7 @@ fecha ingresada se encuentre en el rango establecido por la letra (entre Julio d
 lanzando una exception, 'WrongDate' en caso de que no se cumpla.
 </p>
 
-## Memoria y tiempo de ejecución
+### Memoria y tiempo de ejecución
 
 La medición de memoria se realizó utilizando 'Profiler'. En cuanto a los tiempos de ejecución, de cada función 
 es un tiempo aproximado, ya que lo hemos probado varias veces y los mismos varían.
