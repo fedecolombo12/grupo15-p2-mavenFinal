@@ -1,7 +1,11 @@
 <h1 align="center"> Grupo 15 - P2 - Maven Final </h1>
 <h6 align="center"> Federico Colombo - Yabel Neves </h6>
 
-## Índice
+## <p><span style="color: skyblue;">Índice</span></p>
+
+<p align="center">
+  <img src="UMLObligatorio.png" alt="UML Actualizado">
+</p>
 
 * [Actualización de UML](#actualizacion-uml)
 * [Procesos de Carga](#descripción)
