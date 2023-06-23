@@ -54,6 +54,8 @@ Se crea User y se asignan los valores utilizando el mismo mecanismo que en Tweet
 Se capturan y se ignoran las excepciones generales (usando un bloque try-catch vacío) para evitar que loserrores de formato en los valores del 
 archivo interrumpan el proceso de carga. Si ocurre alguna excepción de lectura del archivo, se lanza una excepción personalizada FileNotValidException 
 con un mensaje de error adecuado.
+
+Memoria: 4.42%
 </p>
 
 
@@ -85,7 +87,8 @@ Se utiliza un TAD 'Heap' para obtener eficientemente los 15 usuarios con más tw
 y se inicializa con el tamaño de la lista de usuarios para un mejor rendimiento. Almacenando los usuarios en el 'Heap', se pueden obtener 
 rápidamente los usuarios con más tweets. Además, la flexibilidad y eficiencia del 'Heap' proporciona beneficios para futuras modificaciones y requisitos del sistema.
 
-Tiempo de ejecución aprox: 32seg.</p>
+Tiempo de ejecución aprox: 32seg.
+Memoria: 21.65% </p>
 
 ### Función 3
 
@@ -95,7 +98,8 @@ para almacenar los hashtags diferentes encontrados en los tweets de un día espe
 ya que no es necesario especificar un tamaño máximo de antemano y acceso a los elementos en un orden secuencial, lo cual es útil para verificar 
 la presencia de un hashtag antes de agregarlo. 
 
-Tiempo de ejecución aprox: 96seg. </p>
+Tiempo de ejecución aprox: 96seg.
+Memoria: 33.82% </p>
 
 ### Función 4
 
@@ -120,7 +124,8 @@ Se elige un tamaño inicial que va a ser el tamaño de 'userList' lo que evita r
 Los usuarios con más favoritos se almacenan en un arreglo de tamaño 7 llamado 'top7', lo que permite un acceso rápido y garantiza un orden específico, pudiendo
 así obtener rápidamente los usuarios con más favoritos sin tener que ordenar toda la lista de usuarios. 
 
-Tiempo de ejecución aprox: 28seg. </p>
+Tiempo de ejecución aprox: 28seg.
+Memoria: 20.07% </p>
 
 ### Función 6
 
@@ -135,7 +140,8 @@ Se usa 'toLowerCase()' en las comparaciones de cadenas. Al convertir tanto el co
 por el usuario a minúsculas, se logra una búsqueda de texto insensible entre mayúsculas y minúsculas, lo que permite encontrar coincidencias.
 La 'ListaEnlazada' es adecuada para este tipo de búsqueda, ya que se puede recorrer secuencialmente cada elemento de la lista.
 
-Tiempo de ejecución aprox: 65seg. </p>
+Tiempo de ejecución aprox: 65seg.
+Memoria: 19.68% </p>
 
 
 ### Funciones Agregadas
