@@ -10,6 +10,7 @@
 * [Actualización de UML](#actualizacion-uml)
 * [Procesos de Carga](#descripción)
 * [Estructura](#estructura)
+* [Memoria](#memoria)
 
 
 ## <p><span style="color: skyblue;"> Actualización UML </span></p>
@@ -152,3 +153,7 @@ En los métodos que se solicita al usuario ingresar fechas por consola, se crear
 fecha ingresada se encuentre en el rango establecido por la letra (entre Julio de 2021 y Agosto de 2022), 
 lanzando una exception, 'WrongDate' en caso de que no se cumpla.
 </p>
+
+## Memoria 
+
+La medición de memoria se realizó utilizando 'Profiler'. 
