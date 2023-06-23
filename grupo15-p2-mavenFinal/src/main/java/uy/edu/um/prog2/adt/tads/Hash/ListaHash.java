@@ -166,6 +166,4 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     public void setLast(NodoHash<K, V> last) {
         this.last = last;
     }
-
-
 }

@@ -12,14 +12,10 @@ import java.util.*;
 import uy.edu.um.prog2.adt.exceptions.*;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 import uy.edu.um.prog2.adt.tads.Hash.*;
-import uy.edu.um.prog2.adt.tads.Queue.MyQueue;
-import uy.edu.um.prog2.adt.tads.Queue.MyQueueImpl;
 
-/*Se crea el metodo desplegable en el cual se va a elegir entre opciones del 0 al 6 para poder realizar las consultas. Ademas,
-se separa con --- cuando comienza y termina cada funcion*/
 public class Main {
     private static ReadCSV readCSVImpl;
-    static void menu() throws WrongDate, EmptyQueueException {
+    static void menu() {
         Scanner scanner = new Scanner(System.in);
         int option;
         do {
@@ -49,10 +45,6 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 1 ------------------------------------------------------
 
-    /* Lo primero que se hace es solicitar a la persona que ejecuta el programa que ingrese al año y mes en el cual
-    se quiere que se ejecute la funcion. Se sobreentiende por la letra del problema que no se va a colocar otra fecha
-    para que se "rompa" el programa.
-    */
     private static void mostTenActivePilotsInTweets(Scanner scanner) {
         TablaHash<String,Integer> hash = new TablaHash<>(10);
         System.out.println("Ingrese año en formato YYYY");
@@ -66,9 +58,7 @@ public class Main {
             long tempFunction1 = System.currentTimeMillis();
             ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
             getDriversFromFile(driversListaEnlazada);
-
             NodoLista<Tweet> tweet = readCSVImpl.getTweetList().getPrimero();
-
             while (tweet != null){
                 NodoLista<String> driver = driversListaEnlazada.getPrimero();
                 String dateTweet = tweet.getValue().getDate();
@@ -77,19 +67,18 @@ public class Main {
                 int month = Integer.parseInt(dateTweetA[1]);
                 if (optionYear == year && optionMonth == month){
                     while (driver != null){
-                    String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
-                    String driverName = driver.getValue().toLowerCase();
-
-                    if (!hash.contains(driverName)){
-                        hash.put(driverName,0);
+                        String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
+                        String driverName = driver.getValue().toLowerCase();
+                        if (!hash.contains(driverName)){
+                            hash.put(driverName,0);
+                        }
+                        if (contentTweet.contains(driverName)){
+                            Integer occurrences = hash.get(driverName);
+                            hash.put(driverName, occurrences + 1);
+                        }
+                        driver = driver.getSiguiente();
                     }
-                    if (contentTweet.contains(driverName)){
-                        Integer occurrences = hash.get(driverName);
-                        hash.put(driverName, occurrences + 1);
-                    }
-                    driver = driver.getSiguiente();
                 }
-            }
                 tweet = tweet.getSiguiente();
             }
             ListaEnlazada<NodoHash<String, Integer>> nodoList = new ListaEnlazada<>();
@@ -141,8 +130,6 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
 
-    /* Se solicita a la persona que ejecuta el programa, el año (2021 o 2022), mes y dia en el cual queremos analizar la
-    cantidad de Hashtags diferentes en un dia.*/
     static void numberOfDifferentHashTagOnADay(Scanner scanner) {
         System.out.println("Ingrese año en formato YYYY");
         scanner.nextLine();
@@ -224,7 +211,7 @@ public class Main {
             return true;
         }
         return false;
-}
+    }
 
     // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
 
@@ -250,27 +237,25 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 6 ------------------------------------------------------
-    static void numberOfTweetsWithASpecificWord(Scanner scanner) throws WrongDate {
-            System.out.println("Ingrese la palabra");
-            scanner.nextLine();
-            String optionWord = scanner.nextLine();
-            int counterTweets = 0;
-            long tempFunction6 = System.currentTimeMillis();
-
-            int i = 1;
-            while (i <= readCSVImpl.getTweetList().size()) {
-                if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
-                    counterTweets++;
-                }
-                i++;
+    static void numberOfTweetsWithASpecificWord(Scanner scanner) {
+        System.out.println("Ingrese la palabra");
+        scanner.nextLine();
+        String optionWord = scanner.nextLine();
+        int counterTweets = 0;
+        long tempFunction6 = System.currentTimeMillis();
+        int i = 1;
+        while (i <= readCSVImpl.getTweetList().size()) {
+            if (readCSVImpl.getTweetList().get(i).getContentTweet().toLowerCase().contains(optionWord.toLowerCase())) {
+                counterTweets++;
             }
-
-            System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
-            System.out.println("Tiempo de carga de esta función es: " + (double) ((System.currentTimeMillis() - tempFunction6)/1000) + " segundos.");
-            System.out.println();
+            i++;
         }
+        System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
+        System.out.println("Tiempo de carga de esta función es: " + (double) ((System.currentTimeMillis() - tempFunction6)/1000) + " segundos.");
+        System.out.println();
+    }
 
-    // -------------------------------------------- LECTURA DE DATOS----------------------------------------------------
+    // ------------------------------------------ LECTURA DE DRIVERS Y MAIN---------------------------------------------
 
     public static void getDriversFromFile(ListaEnlazada<String> driversLinkedList) {
         final String driversFile = "grupo15-p2-mavenFinal/src/main/resources/drivers.txt";
@@ -283,7 +268,7 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) throws FileNotValidException, IOException, WrongDate, EmptyQueueException {
+    public static void main(String[] args) throws FileNotValidException {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
         long tempDrivers = System.currentTimeMillis();
         getDriversFromFile(driversLinkedList);
@@ -301,28 +286,18 @@ public class Main {
     // -------------------------------------------- CHEQUEO DE FECHA----------------------------------------------------
 
     public static boolean verificarFechaEnRango(String fechaStr) {
-        boolean variable = false;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         LocalDate fecha = LocalDate.parse(fechaStr, formatter);
-
         LocalDate fechaInicioRango = LocalDate.of(2021, 7, 1);
         LocalDate fechaFinRango = LocalDate.of(2022, 8, 31);
-
         return !fecha.isBefore(fechaInicioRango) && !fecha.isAfter(fechaFinRango);
     }
 
     public static boolean verificarFechaEnRangoYM(String fechaStr) {
-        boolean variable = false;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-
         YearMonth fecha = YearMonth.parse(fechaStr, formatter);
-
         YearMonth fechaInicioRango = YearMonth.of(2021, 7);
         YearMonth fechaFinRango = YearMonth.of(2022, 8);
-
         return !fecha.isBefore(fechaInicioRango) && !fecha.isAfter(fechaFinRango);
     }
-
-
 }
