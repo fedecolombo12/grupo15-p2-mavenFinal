@@ -1,22 +1,22 @@
 <h1 align="center"> Grupo 15 - P2 - Maven Final </h1>
 <h6 align="center"> Federico Colombo - Yabel Neves </h6>
 
-## <p><span style="color: skyblue;">Índice</span></p>
 
 <p align="center">
   <img src="UMLObligatorio.png" alt="UML Actualizado">
 </p>
 
+## <p><span style="color: skyblue;"> Índice </span></p>
 * [Actualización de UML](#actualizacion-uml)
 * [Procesos de Carga](#descripción)
 * [Estructura](#estructura)
 
 
-## <p><span style="color: skyblue;">Actualización UML</span></p>
+## <p><span style="color: skyblue;"> Actualización UML </span></p>
 <p> Se agrega a la entidad 'User' los atributos: isVerified, del tipo boolean y userFavourites, del tipo int. </p>
 <p> Se agrega a la entidad 'Tweet' el atributo: date, del tipo String. </p>
 
-## <p><span style="color: skyblue;">Procesos de Carga</span></p>
+## <p><span style="color: skyblue;"> Procesos de Carga </span></p>
 
 ### Lectura de Drivers
 <p align="justify"> 
