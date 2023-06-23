@@ -4,6 +4,7 @@ public class NodoHash<K, T> implements Comparable<NodoHash<K, T>> {
     private K key;
     private T data;
     private NodoHash<K, T> next;
+
     public NodoHash(K key, T data) {
         this.key = key;
         this.data = data;

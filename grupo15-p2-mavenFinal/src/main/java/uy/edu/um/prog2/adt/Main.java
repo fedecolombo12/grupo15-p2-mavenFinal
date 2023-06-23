@@ -1,20 +1,27 @@
 package uy.edu.um.prog2.adt;
-import uy.edu.um.prog2.adt.entities.*;
+
+import uy.edu.um.prog2.adt.entities.HashTag;
+import uy.edu.um.prog2.adt.entities.Tweet;
+import uy.edu.um.prog2.adt.entities.User;
+import uy.edu.um.prog2.adt.exceptions.FileNotValidException;
+import uy.edu.um.prog2.adt.tads.Hash.ListaHash;
+import uy.edu.um.prog2.adt.tads.Hash.NodoHash;
+import uy.edu.um.prog2.adt.tads.Hash.TablaHash;
 import uy.edu.um.prog2.adt.tads.Heap.MyHeapImpl;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
+import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import uy.edu.um.prog2.adt.exceptions.*;
-import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
-import uy.edu.um.prog2.adt.tads.Hash.*;
+import java.util.Scanner;
 
 public class Main {
     private static ReadCSV readCSVImpl;
+
     static void menu() {
         Scanner scanner = new Scanner(System.in);
         int option;
@@ -46,7 +53,7 @@ public class Main {
     // ----------------------------------------------- FUNCTION 1 ------------------------------------------------------
 
     private static void mostTenActivePilotsInTweets(Scanner scanner) {
-        TablaHash<String,Integer> hash = new TablaHash<>(10);
+        TablaHash<String, Integer> hash = new TablaHash<>(10);
         System.out.println("Ingrese año en formato YYYY");
         scanner.nextLine();
         int optionYear = scanner.nextInt();
@@ -54,25 +61,25 @@ public class Main {
         System.out.println("Ingrese mes en formato MM");
         int optionMonth = scanner.nextInt();
         String totalDate = optionYear + "-" + optionMonth;
-        if (verificarFechaEnRangoYM(totalDate)){
+        if (verificarFechaEnRangoYM(totalDate)) {
             long tempFunction1 = System.currentTimeMillis();
             ListaEnlazada<String> driversListaEnlazada = new ListaEnlazada<>();
             getDriversFromFile(driversListaEnlazada);
             NodoLista<Tweet> tweet = readCSVImpl.getTweetList().getPrimero();
-            while (tweet != null){
+            while (tweet != null) {
                 NodoLista<String> driver = driversListaEnlazada.getPrimero();
                 String dateTweet = tweet.getValue().getDate();
                 String[] dateTweetA = dateTweet.split("-");
                 int year = Integer.parseInt(dateTweetA[0]);
                 int month = Integer.parseInt(dateTweetA[1]);
-                if (optionYear == year && optionMonth == month){
-                    while (driver != null){
+                if (optionYear == year && optionMonth == month) {
+                    while (driver != null) {
                         String contentTweet = tweet.getValue().getContentTweet().toLowerCase();
                         String driverName = driver.getValue().toLowerCase();
-                        if (!hash.contains(driverName)){
-                            hash.put(driverName,0);
+                        if (!hash.contains(driverName)) {
+                            hash.put(driverName, 0);
                         }
-                        if (contentTweet.contains(driverName)){
+                        if (contentTweet.contains(driverName)) {
                             Integer occurrences = hash.get(driverName);
                             hash.put(driverName, occurrences + 1);
                         }
@@ -85,7 +92,7 @@ public class Main {
             for (int i = 0; i < hash.size(); i++) {
                 try {
                     ListaHash<String, Integer>[] buckets = hash.getBuckets(i);
-                    if (buckets != null  && buckets.length > 0) {
+                    if (buckets != null && buckets.length > 0) {
                         NodoHash<String, Integer> nodoActual = buckets[0].getFirst();
                         while (nodoActual != null) {
                             nodoList.add(nodoActual);
@@ -96,21 +103,21 @@ public class Main {
                     e.printStackTrace();
                 }
             }
-            MyHeapImpl<Integer,NodoHash<String, Integer>> driversHeap = new MyHeapImpl(nodoList.size());
-            NodoLista<NodoHash<String,Integer>> nodo = nodoList.getPrimero();
-            while (nodo != null){
+            MyHeapImpl<Integer, NodoHash<String, Integer>> driversHeap = new MyHeapImpl(nodoList.size());
+            NodoLista<NodoHash<String, Integer>> nodo = nodoList.getPrimero();
+            while (nodo != null) {
                 driversHeap.insert(nodo.getValue().getData(), nodo.getValue());
                 nodo = nodo.getSiguiente();
             }
             NodoHash<String, Integer>[] topTen = new NodoHash[10];
             for (int i = 0; i < 10; i++) {
                 NodoHash<String, Integer> nuevoNodo = driversHeap.extractMax();
-                if (nuevoNodo != null){
+                if (nuevoNodo != null) {
                     topTen[i] = nuevoNodo;
                     System.out.println(nuevoNodo.getKey() + " con " + nuevoNodo.getData() + " ocurrencias.");
                 }
             }
-            System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction1)/1000) +" segundos.");
+            System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction1) / 1000) + " segundos.");
             System.out.println();
         }
     }
@@ -145,9 +152,9 @@ public class Main {
         int numberOfDifferentHashTag = 0;
         for (int i = 1; i <= readCSVImpl.getTweetList().size(); i++) {
             if (readCSVImpl.getTweetList().get(i).getDate().equals(totalDate)) {
-                for (int j = 1; j <= readCSVImpl.getTweetList().get(i).getHashTagTweet().size() ; j++) {
+                for (int j = 1; j <= readCSVImpl.getTweetList().get(i).getHashTagTweet().size(); j++) {
                     String hashTagInList = readCSVImpl.getTweetList().get(i).getHashTagTweet().get(j).getTextHashTag().toLowerCase();
-                    if (!(difHashTag.contains((hashTagInList)))){
+                    if (!(difHashTag.contains((hashTagInList)))) {
                         difHashTag.add(hashTagInList);
                         numberOfDifferentHashTag++;
                     }
@@ -155,13 +162,13 @@ public class Main {
             }
         }
         System.out.println("La cantidad de hashtags distintos para el dia " + totalDate + " son " + numberOfDifferentHashTag);
-        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction3)/1000) +" segundos.");
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction3) / 1000) + " segundos.");
         System.out.println();
     }
 
     // ----------------------------------------------- FUNCTION 4 ------------------------------------------------------
     static void mostUsedHashTag(Scanner scanner) {
-        TablaHash<String,Integer> hashHashtag = new TablaHash<>(50);
+        TablaHash<String, Integer> hashHashtag = new TablaHash<>(50);
         System.out.println("Ingrese año en formato YYYY");
         scanner.nextLine();
         int optionYear = scanner.nextInt();
@@ -178,7 +185,7 @@ public class Main {
         int maxCount = 0;
         NodoLista<Tweet> aux = readCSVImpl.getTweetList().getPrimero();
         while (aux != null) {
-            if(aux.getValue().getDate().equals(totalDate)) {
+            if (aux.getValue().getDate().equals(totalDate)) {
                 NodoLista<HashTag> auxHashtag = aux.getValue().getHashTagTweet().getPrimero();
                 while (auxHashtag != null) {
                     String hashtagText = auxHashtag.getValue().getTextHashTag();
@@ -202,15 +209,13 @@ public class Main {
         if (maxHashtag != null) {
             System.out.println("El hashtag más utilizado es: " + maxHashtag + " y aparece " + maxCount + " veces");
         }
-        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction4)/1000) +" segundos.");
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction4) / 1000) + " segundos.");
         System.out.println();
     }
+
     private static boolean notF1(String word) {
         String not = "f1"; // Agrega aquí todas las palabras prohibidas
-        if (word.equalsIgnoreCase(not)) {
-            return true;
-        }
-        return false;
+        return word.equalsIgnoreCase(not);
     }
 
     // ----------------------------------------------- FUNCTION 5 ------------------------------------------------------
@@ -219,10 +224,10 @@ public class Main {
         long tempFunction5 = System.currentTimeMillis();
         MyHeapImpl<Integer, User> heapUsers = new MyHeapImpl<>(readCSVImpl.getUserList().size());
         for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
-            heapUsers.insert(readCSVImpl.getUserList().get(i).getUserFavourites(),readCSVImpl.getUserList().get(i));
+            heapUsers.insert(readCSVImpl.getUserList().get(i).getUserFavourites(), readCSVImpl.getUserList().get(i));
         }
         User[] top7 = new User[7];
-        for (int i = 0; i < 7 ; i++){
+        for (int i = 0; i < 7; i++) {
             top7[i] = heapUsers.extractMax();
         }
         System.out.println("Las 7 cuentas con más favoritos son: ");
@@ -232,7 +237,7 @@ public class Main {
             System.out.println("Favoritos: " + top7[i].getUserFavourites());
             System.out.println();
         }
-        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction5)/1000) +" segundos.");
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction5) / 1000) + " segundos.");
         System.out.println();
     }
 
@@ -251,7 +256,7 @@ public class Main {
             i++;
         }
         System.out.println("La cantidad de Tweets con la palabra " + optionWord + " son " + counterTweets);
-        System.out.println("Tiempo de carga de esta función es: " + (double) ((System.currentTimeMillis() - tempFunction6)/1000) + " segundos.");
+        System.out.println("Tiempo de carga de esta función es: " + (double) ((System.currentTimeMillis() - tempFunction6) / 1000) + " segundos.");
         System.out.println();
     }
 
@@ -268,18 +273,19 @@ public class Main {
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) throws FileNotValidException {
         ListaEnlazada<String> driversLinkedList = new ListaEnlazada<>();
         long tempDrivers = System.currentTimeMillis();
         getDriversFromFile(driversLinkedList);
-        System.out.println("Tiempo de carga de los drivers: " + (double) ((System.currentTimeMillis() - tempDrivers)/1000) +" segundos.");
+        System.out.println("Tiempo de carga de los drivers: " + (double) ((System.currentTimeMillis() - tempDrivers) / 1000) + " segundos.");
         System.out.println();
         System.out.println("Cargando CSV...");
         System.out.println();
         readCSVImpl = new ReadCSV();
         long tempCSV = System.currentTimeMillis();
         readCSVImpl.getCsvInfo();
-        System.out.println("Tiempo de carga del CSV: " + (double) ((System.currentTimeMillis() - tempCSV)/1000) +" segundos.");
+        System.out.println("Tiempo de carga del CSV: " + (double) ((System.currentTimeMillis() - tempCSV) / 1000) + " segundos.");
         menu();
     }
 

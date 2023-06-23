@@ -2,15 +2,17 @@ package uy.edu.um.prog2.adt.tads.Stack;
 
 import uy.edu.um.prog2.adt.exceptions.EmptyStackException;
 
-public class MyStackImpl<T> implements MyStack<T>{
+public class MyStackImpl<T> implements MyStack<T> {
+    private NodoStack<T> ultimo;
+
     public MyStackImpl() {
         this.ultimo = ultimo;
     }
-    private NodoStack<T> ultimo;
 
     public NodoStack<T> getUltimo() {
         return ultimo;
     }
+
     public void setUltimo(NodoStack<T> ultimo) {
         this.ultimo = ultimo;
     }
@@ -27,6 +29,7 @@ public class MyStackImpl<T> implements MyStack<T>{
             return valor;
         }
     }
+
     @Override
     public T top() throws EmptyStackException {
         if (isEmpty()) {

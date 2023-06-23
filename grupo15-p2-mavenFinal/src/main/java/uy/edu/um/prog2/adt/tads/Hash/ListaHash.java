@@ -1,4 +1,5 @@
 package uy.edu.um.prog2.adt.tads.Hash;
+
 import uy.edu.um.prog2.adt.tads.Lista.Lista;
 import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 
@@ -43,7 +44,8 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     }
 
     @Override
-    public boolean contains(NodoHash<K, V> value) { return false;
+    public boolean contains(NodoHash<K, V> value) {
+        return false;
     }
 
     public V get(K key) {
@@ -56,6 +58,7 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
         }
         return null; // Si no se encuentra la clave, retorna null o puedes lanzar una excepción
     }
+
     public NodoHash<K, V> getNode(K key) {
         NodoHash<K, V> current = first;
         while (current != null) {
@@ -123,7 +126,6 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
 
     @Override
     public void imprimirLista() {
-        return;
     }
 
     @Override
@@ -144,7 +146,7 @@ public class ListaHash<K, V> implements Lista<NodoHash<K, V>> {
     public void print() {
         NodoHash<K, V> current = first;
         for (int i = 0; i < this.size(); i++) {
-            System.out.print(current.getData() );
+            System.out.print(current.getData());
             if (current.getNext() != null) {
                 current = current.getNext();
             }

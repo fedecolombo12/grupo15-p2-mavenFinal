@@ -4,12 +4,12 @@ import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 public class TablaHash<K, T extends Comparable<T>> implements MyHash<K, T> {
 
-    private ListaHash<K, T>[] buckets;
     int size;
+    private ListaHash<K, T>[] buckets;
 
     public TablaHash(int size) {
         this.size = size;
-        buckets =  new ListaHash[size];
+        buckets = new ListaHash[size];
         for (int i = 0; i < size; i++) {
             buckets[i] = new ListaHash<>();
         }
@@ -17,6 +17,10 @@ public class TablaHash<K, T extends Comparable<T>> implements MyHash<K, T> {
 
     public ListaHash<K, T>[] getBuckets() {
         return buckets;
+    }
+
+    public void setBuckets(ListaHash<K, T>[] buckets) {
+        this.buckets = buckets;
     }
 
     public int getSize() {
@@ -43,6 +47,7 @@ public class TablaHash<K, T extends Comparable<T>> implements MyHash<K, T> {
             bucket.add(new NodoHash<>(key, value)); // Agrega un nuevo nodo si la clave no existe
         }
     }
+
     @Override
     public boolean contains(K key) {
         int code = hashCode(key);
@@ -64,7 +69,7 @@ public class TablaHash<K, T extends Comparable<T>> implements MyHash<K, T> {
     }
 
     @Override
-    public NodoHash<K,T> getNode(K key){
+    public NodoHash<K, T> getNode(K key) {
         int code = hashCode(key);
         return buckets[code].getNode(key);
     }
@@ -77,7 +82,6 @@ public class TablaHash<K, T extends Comparable<T>> implements MyHash<K, T> {
             System.out.println();
         }
     }
-
 
     @Override
     public void remove(K key) {
@@ -100,12 +104,12 @@ public class TablaHash<K, T extends Comparable<T>> implements MyHash<K, T> {
         return size() == 0;
     }
 
-    public ListaEnlazada<NodoHash<K,T>> getAllEntries(){
-        ListaEnlazada<NodoHash<K,T>> entries = new ListaEnlazada<>();
+    public ListaEnlazada<NodoHash<K, T>> getAllEntries() {
+        ListaEnlazada<NodoHash<K, T>> entries = new ListaEnlazada<>();
 
-        for (ListaHash<K,T> bucket : buckets) {
-            NodoHash<K,T> current = bucket.getFirst();
-            while (current != null){
+        for (ListaHash<K, T> bucket : buckets) {
+            NodoHash<K, T> current = bucket.getFirst();
+            while (current != null) {
                 entries.add(current);
                 current = current.getNext();
             }
@@ -114,13 +118,9 @@ public class TablaHash<K, T extends Comparable<T>> implements MyHash<K, T> {
     }
 
     public ListaHash[] getBuckets(int index) {
-        if (index < 0 || index >= size){
+        if (index < 0 || index >= size) {
             return new ListaHash[0];
         }
         return new ListaHash[]{buckets[index]};
-    }
-
-    public void setBuckets(ListaHash<K, T>[] buckets) {
-        this.buckets = buckets;
     }
 }

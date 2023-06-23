@@ -1,6 +1,6 @@
 package uy.edu.um.prog2.adt.tads.Lista;
 
-public class NodoLista<T>{
+public class NodoLista<T> {
     private T value;
 
     private NodoLista<T> siguiente;

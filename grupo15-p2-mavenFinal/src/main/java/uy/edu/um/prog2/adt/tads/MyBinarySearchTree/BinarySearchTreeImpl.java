@@ -2,25 +2,30 @@ package uy.edu.um.prog2.adt.tads.MyBinarySearchTree;
 
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
-public class BinarySearchTreeImpl <K extends Comparable<K>, T> implements BinarySearchTree<K, T> {
+public class BinarySearchTreeImpl<K extends Comparable<K>, T> implements BinarySearchTree<K, T> {
     private NodoBST<K, T> raiz;
     private ListaEnlazada<NodoBST<K, T>> orden;
 
-    public NodoBST<K, T> getRaiz() {return raiz;}
-    public void setRaiz(NodoBST<K, T> raiz) {
-        this.raiz = raiz;
-    }
     public BinarySearchTreeImpl() {
         this.raiz = null;
     }
+
+    public NodoBST<K, T> getRaiz() {
+        return raiz;
+    }
+
+    public void setRaiz(NodoBST<K, T> raiz) {
+        this.raiz = raiz;
+    }
+
     @Override
     public T find(K key) {
         return findRec(key, getRaiz());
     }
 
-    public T findRec(K keyBuscar, NodoBST<K,T> nuevoNodo){
+    public T findRec(K keyBuscar, NodoBST<K, T> nuevoNodo) {
         T valInicial = null;
-        if (getRaiz() != null){
+        if (getRaiz() != null) {
             int valor = keyBuscar.compareTo(nuevoNodo.getKey());
             if (valor > 0) {
                 valInicial = findRec(keyBuscar, nuevoNodo.getRight());
@@ -32,19 +37,20 @@ public class BinarySearchTreeImpl <K extends Comparable<K>, T> implements Binary
         }
         return valInicial;
     }
+
     @Override
     public void insert(K key, T data) {
-        NodoBST<K,T> ingreso = new NodoBST<>(key,data);
-        if (getRaiz() == null){
+        NodoBST<K, T> ingreso = new NodoBST<>(key, data);
+        if (getRaiz() == null) {
             setRaiz(ingreso);
         } else {
-            getRaiz().ingresoRec(key,data);
+            getRaiz().ingresoRec(key, data);
         }
     }
 
     @Override
     public void delete(K key) {
-        if (getRaiz() != null){
+        if (getRaiz() != null) {
             setRaiz(getRaiz().deleteRec(key));
         }
     }
@@ -56,8 +62,8 @@ public class BinarySearchTreeImpl <K extends Comparable<K>, T> implements Binary
         return listPreO;
     }
 
-    private void preOrderR(NodoBST<K, T> node, ListaEnlazada<NodoBST<K, T>> nodeListPreO){
-        if (node != null){
+    private void preOrderR(NodoBST<K, T> node, ListaEnlazada<NodoBST<K, T>> nodeListPreO) {
+        if (node != null) {
             nodeListPreO.add(node);
             this.preOrderR(node.getLeft(), nodeListPreO);
             this.preOrderR(node.getRight(), nodeListPreO);
@@ -72,11 +78,11 @@ public class BinarySearchTreeImpl <K extends Comparable<K>, T> implements Binary
     }
 
 
-    private void inOrderR(NodoBST<K, T> node, ListaEnlazada<NodoBST<K, T>> nodeListInO){
-        if (node != null){
+    private void inOrderR(NodoBST<K, T> node, ListaEnlazada<NodoBST<K, T>> nodeListInO) {
+        if (node != null) {
             this.inOrderR(node.getLeft(), nodeListInO);
             nodeListInO.add(node);
-            this.inOrderR(node.getRight(),nodeListInO);
+            this.inOrderR(node.getRight(), nodeListInO);
         }
     }
 
@@ -87,6 +93,7 @@ public class BinarySearchTreeImpl <K extends Comparable<K>, T> implements Binary
         this.posOrderR(this.raiz, listPosO);
         return listPosO;
     }
+
     private void posOrderR(NodoBST<K, T> node, ListaEnlazada<NodoBST<K, T>> nodeListPosO) {
         if (node != null) {
             this.posOrderR(node.getLeft(), nodeListPosO);
@@ -96,15 +103,15 @@ public class BinarySearchTreeImpl <K extends Comparable<K>, T> implements Binary
 
     }
 
-    public NodoBST min(NodoBST<K,T> node){
-        if (node.getLeft() == null){
+    public NodoBST min(NodoBST<K, T> node) {
+        if (node.getLeft() == null) {
             return node;
         }
         return min(node.getLeft());
     }
 
-    public NodoBST delMin(NodoBST<K,T> node){
-        if (node.getLeft() == null){
+    public NodoBST delMin(NodoBST<K, T> node) {
+        if (node.getLeft() == null) {
             return node.getRight();
         }
         node.setLeft(delMin(node.getLeft()));

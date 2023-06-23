@@ -1,26 +1,32 @@
 package uy.edu.um.prog2.adt.tads.Queue;
-import uy.edu.um.prog2.adt.exceptions.EmptyQueueException;
-import uy.edu.um.prog2.adt.tads.Lista.NodoLista;
 
-public class MyQueueImpl <T> implements MyQueue<T> {
+import uy.edu.um.prog2.adt.exceptions.EmptyQueueException;
+
+public class MyQueueImpl<T> implements MyQueue<T> {
     private NodoQueue<T> primero;
     private NodoQueue<T> ultimo;
+
     public MyQueueImpl() {
         this.primero = null;
         this.ultimo = null;
     }
+
     public NodoQueue<T> getPrimero() {
         return primero;
     }
+
     public void setPrimero(NodoQueue<T> primero) {
         this.primero = primero;
     }
+
     public NodoQueue<T> getUltimo() {
         return ultimo;
     }
+
     public void setUltimo(NodoQueue<T> ultimo) {
         this.ultimo = ultimo;
     }
+
     @Override
     public void enqueue(T element) {
         NodoQueue<T> newNodo = new NodoQueue<>(element);
@@ -54,6 +60,7 @@ public class MyQueueImpl <T> implements MyQueue<T> {
         }
         return item;
     }
+
     @Override
     public boolean isEmpty() {
         return getPrimero() == null && getUltimo() == null;

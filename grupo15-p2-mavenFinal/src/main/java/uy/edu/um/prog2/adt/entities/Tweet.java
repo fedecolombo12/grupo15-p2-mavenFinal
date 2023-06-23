@@ -1,9 +1,7 @@
 package uy.edu.um.prog2.adt.entities;
 
-import uy.edu.um.prog2.adt.tads.Lista.Lista;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 /* Se crean la entidad Tweet la cual tiene un ID único, el contenido del mismo, desde donde se twitteo (source),
@@ -66,13 +64,21 @@ public class Tweet implements Comparable<Tweet> {
         isRetweet = retweet;
     }
 
-    public ListaEnlazada<HashTag> getHashTagTweet() {return hashTagTweet;}
+    public ListaEnlazada<HashTag> getHashTagTweet() {
+        return hashTagTweet;
+    }
 
-    public void setHashTagTweet(ListaEnlazada<HashTag> hashTagTweet) {this.hashTagTweet = hashTagTweet;}
+    public void setHashTagTweet(ListaEnlazada<HashTag> hashTagTweet) {
+        this.hashTagTweet = hashTagTweet;
+    }
 
-    public String getDate() {return date;}
+    public String getDate() {
+        return date;
+    }
 
-    public void setDate(String date) {this.date = date;}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     @Override
     public int compareTo(Tweet o) {

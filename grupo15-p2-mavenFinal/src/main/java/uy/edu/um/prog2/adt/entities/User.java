@@ -1,6 +1,5 @@
 package uy.edu.um.prog2.adt.entities;
 
-import uy.edu.um.prog2.adt.tads.Lista.Lista;
 import uy.edu.um.prog2.adt.tads.Lista.ListaEnlazada;
 
 import java.util.Objects;
@@ -11,10 +10,10 @@ una vez. Como las demas entidades, se crea el constructor, getters y setters, y 
  */
 public class User implements Comparable<User> {
     private static long userIdCounter = 0;
-    private long idUser;
-    private String name;
     boolean isVerified;
     int userFavourites;
+    private long idUser;
+    private String name;
     private ListaEnlazada<Tweet> listaTweet;
 
     public User(long idUser, String name, boolean isVerified, int userFavourites) {
@@ -26,7 +25,7 @@ public class User implements Comparable<User> {
     }
 
     public User() {
-        this.idUser = ++userIdCounter;;
+        this.idUser = ++userIdCounter;
         this.listaTweet = new ListaEnlazada<>();
     }
 
@@ -62,9 +61,13 @@ public class User implements Comparable<User> {
         isVerified = verified;
     }
 
-    public int getUserFavourites() {return userFavourites;}
+    public int getUserFavourites() {
+        return userFavourites;
+    }
 
-    public void setUserFavourites(int userFavourites) {this.userFavourites = userFavourites;}
+    public void setUserFavourites(int userFavourites) {
+        this.userFavourites = userFavourites;
+    }
 
     @Override
     public boolean equals(Object o) {

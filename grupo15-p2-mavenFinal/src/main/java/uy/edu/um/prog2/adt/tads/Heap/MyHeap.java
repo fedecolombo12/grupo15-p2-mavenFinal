@@ -1,9 +1,12 @@
 package uy.edu.um.prog2.adt.tads.Heap;
 
 public interface MyHeap<K, T> {
-    void insert (K key, T data);
-    T extractMax ();
+    void insert(K key, T data);
+
+    T extractMax();
+
     int size();
+
     boolean is_empty();
 
     // heapifyUp: sube el elemento ingresado hasta la posición correcta,

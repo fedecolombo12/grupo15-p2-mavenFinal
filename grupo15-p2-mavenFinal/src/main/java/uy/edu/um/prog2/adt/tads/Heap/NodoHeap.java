@@ -10,10 +10,6 @@ public class NodoHeap<K extends Comparable<K>, T> {
         this.value = data;
     }
 
-    public void setKey(K key) {
-        this.key = key;
-    }
-
     public T getValue() {
         return value;
     }
@@ -24,6 +20,10 @@ public class NodoHeap<K extends Comparable<K>, T> {
 
     public K getKey() {
         return key;
+    }
+
+    public void setKey(K key) {
+        this.key = key;
     }
 }
 

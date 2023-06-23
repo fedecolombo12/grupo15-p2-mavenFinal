@@ -1,24 +1,28 @@
 package uy.edu.um.prog2.adt.tads.Lista;
 
-public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
+public class ListaEnlazada<T extends Comparable<T>> implements Lista<T> {
     private NodoLista<T> primero;
     private NodoLista<T> ultimo;
+
     public NodoLista<T> getPrimero() {
         return primero;
     }
+
     public void setPrimero(NodoLista<T> primero) {
         this.primero = primero;
     }
+
     public NodoLista<T> getUltimo() {
         return ultimo;
     }
+
     public void setUltimo(NodoLista<T> ultimo) {
         this.ultimo = ultimo;
     }
 
     @Override
     public void add(T value) {
-        if (getPrimero() == null){ // si la lista es vacia lo agrega al pricipio
+        if (getPrimero() == null) { // si la lista es vacia lo agrega al pricipio
             NodoLista<T> nuevonodo = new NodoLista<>(value);
             setPrimero(nuevonodo);
             setUltimo(nuevonodo);
@@ -29,21 +33,23 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
             setUltimo(nuevonodo);
         }
     }
+
     @Override
     public void addFirst(T value) {
         NodoLista<T> nuevonodo = new NodoLista<>(value);
         setPrimero(nuevonodo);
-        if (getPrimero() == null){ // si la lista es vacia lo agrega al pricipio
+        if (getPrimero() == null) { // si la lista es vacia lo agrega al pricipio
             setUltimo(nuevonodo);
         } else {
             NodoLista<T> aux = nuevonodo.getSiguiente();
             nuevonodo.setSiguiente(aux);
         }
     }
+
     @Override
     public void addOrder(T value) { // no es eficiente porque recorro cada vez que arreglo toda la lista
         NodoLista<T> nuevonodo = new NodoLista<>(value);
-        if (getPrimero() == null){ // si la lista es vacia lo agrega al pricipio
+        if (getPrimero() == null) { // si la lista es vacia lo agrega al pricipio
             setPrimero(nuevonodo);
             setUltimo(nuevonodo);
         } else {
@@ -56,6 +62,7 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
             }
         }
     }
+
     @Override
     public void remove(T value) {
         NodoLista<T> before = null;
@@ -82,6 +89,7 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
             }
         }
     }
+
     @Override
     public T get(int position) {
         T result = null;
@@ -91,10 +99,9 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
                 result = aux.getValue();
             } else if (position == size()) {
                 result = getUltimo().getValue();
-            }
-            else {
+            } else {
                 int contador = 1;
-                while (aux.getSiguiente() != null){
+                while (aux.getSiguiente() != null) {
                     aux = aux.getSiguiente();
                     contador++;
                     if (contador == position) {
@@ -102,24 +109,22 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
                     }
                 }
             }
-        }
-        else {
+        } else {
             System.out.println("No existe esa posicion en la lista");
         }
         return result;
     }
 
     public T getPosition(int position) {
-        if (position > size()){
+        if (position > size()) {
             return null;
-        }
-        else {
+        } else {
             NodoLista<T> newNode = this.primero;
-            while (position > 0){
+            while (position > 0) {
                 newNode = newNode.getSiguiente();
                 position = position - 1;
             }
-            if (newNode == null){
+            if (newNode == null) {
                 return null;
             }
             return newNode.getValue();
@@ -137,6 +142,7 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
         }
         return false;
     }
+
     @Override
     public int size() {
         int size = 0;
@@ -194,6 +200,7 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
             }
         }
     }
+
     private boolean content(T data) {
         NodoLista<T> aux = getPrimero();
         while (aux != null) {
@@ -214,6 +221,7 @@ public class ListaEnlazada<T extends Comparable<T>> implements Lista<T>{
         }
         System.out.println();
     }
+
     @Override
     public NodoLista<T> searchT(T value) {
         NodoLista<T> aux = getPrimero();
