@@ -71,7 +71,7 @@ public class User implements Comparable<User> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return name == user.name;
+        return Objects.equals(name, user.name);
     }
 
     @Override

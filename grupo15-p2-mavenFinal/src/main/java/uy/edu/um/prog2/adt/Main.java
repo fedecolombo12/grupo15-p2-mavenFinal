@@ -127,26 +127,16 @@ public class Main {
     }
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
-    static void topFifteenUsers() throws EmptyQueueException {
-            /*// Create a priority queue based on the tweet list size
-            MyQueue<User> queue = new MyQueueImpl<>();
-
-            // Insert users into the priority queue based on their tweet list size
-            for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
-                User user = readCSVImpl.getUserList().get(i);
-                int tweetSize = user.getlistaTweet().size();
-                queue.enqueueWithPriority(user, tweetSize);
-            }
-
-            // Print the top 15 users with the most tweets
-            for (int i = 0; i < 15 && !queue.isEmpty(); i++) {
-                User user = queue.dequeue();
-                System.out.println("Nombre de Usuario: " + user.getName());
-                System.out.println("Tiene: " + user.getlistaTweet().size() + " tweets");
-                System.out.println("Verificación: " + user.isVerified());
-                System.out.println();
-            }*/
-
+    static void topFifteenUsers() {
+        MyHeapImpl<Integer, User> ranking = new MyHeapImpl<>(readCSVImpl.getUserList().size());
+        for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
+            ranking.insert(readCSVImpl.getUserList().get(i).getlistaTweet().size(), readCSVImpl.getUserList().get(i));
+        }
+        for (int c = 1; c <= 15; c++) {
+            User user = ranking.extractMax();
+            System.out.println("Nº " + c + " Cantidad de tweets: " + user.getlistaTweet().size() +
+                    "  Verificado: " + user.isVerified() + " Usuario: " + user.getName());
+        }
     }
 
     // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
