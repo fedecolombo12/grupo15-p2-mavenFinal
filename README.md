@@ -154,6 +154,7 @@ fecha ingresada se encuentre en el rango establecido por la letra (entre Julio d
 lanzando una exception, 'WrongDate' en caso de que no se cumpla.
 </p>
 
-## Memoria 
+## Memoria y tiempo de ejecución
 
-La medición de memoria se realizó utilizando 'Profiler'. 
+La medición de memoria se realizó utilizando 'Profiler'. En cuanto a los tiempos de ejecución, de cada función 
+es un tiempo aproximado, ya que lo hemos probado varias veces y los mismos varían.

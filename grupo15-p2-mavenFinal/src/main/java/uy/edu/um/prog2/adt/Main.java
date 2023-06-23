@@ -124,6 +124,7 @@ public class Main {
 
     // ----------------------------------------------- FUNCTION 2 ------------------------------------------------------
     static void topFifteenUsers() {
+        long tempFunction2 = System.currentTimeMillis();
         MyHeapImpl<Integer, User> ranking = new MyHeapImpl<>(readCSVImpl.getUserList().size());
         for (int i = 1; i < readCSVImpl.getUserList().size(); i++) {
             ranking.insert(readCSVImpl.getUserList().get(i).getlistaTweet().size(), readCSVImpl.getUserList().get(i));
@@ -133,6 +134,7 @@ public class Main {
             System.out.println("Nº " + c + " Cantidad de tweets: " + user.getlistaTweet().size() +
                     "  Verificado: " + user.isVerified() + " Usuario: " + user.getName());
         }
+        System.out.println("Tiempo de carga de esta funcion es: " + (double) ((System.currentTimeMillis() - tempFunction2) / 1000) + " segundos.");
     }
 
     // ----------------------------------------------- FUNCTION 3 ------------------------------------------------------
